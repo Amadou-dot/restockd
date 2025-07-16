@@ -3,11 +3,6 @@ import ProductList from '@/components/ProductList';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
 
-// export const metadata: Metadata = {
-//   title: 'Products',
-//   description: 'Browse our collection of products',
-// };
-
 export default function ProductsPage() {
   const router = useRouter();
   const pathname = usePathname();
@@ -28,5 +23,11 @@ export default function ProductsPage() {
   const handlePageChange = (page: number) => {
     setSearchParam('page', page.toString());
   };
-  return <ProductList page={currentPage} onPageChange={handlePageChange} />;
+  return (
+    <>
+      <title>Products</title>
+      <meta name='description' content='Browse our collection of products' />
+      <ProductList page={currentPage} onPageChange={handlePageChange} />
+    </>
+  );
 }

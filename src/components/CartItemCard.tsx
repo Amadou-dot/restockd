@@ -1,9 +1,8 @@
 import { Card, CardBody } from '@heroui/card';
-import { Image } from '@heroui/image';
-
 import { Button } from '@heroui/button';
-import { FaMinus, FaPlus } from 'react-icons/fa6';
-import type { PopulatedCartItem } from '../../types/Cart';
+import { Image } from '@heroui/image';
+import { FaMinus, FaPlus } from 'react-icons/fa';
+import type { PopulatedCartItem } from '../types/Cart';
 
 export default function CartItemCard({
   item,
@@ -12,51 +11,9 @@ export default function CartItemCard({
   item: PopulatedCartItem;
   canModify?: boolean;
 }) {
-  const {
-    mutate: addToCart,
-    isPending: isLoading,
-    error,
-  }: {
-    mutate: (id: string) => void;
-    isPending: boolean;
-    error: Error | null;
-  } = {
-    mutate: () => {},
-    isPending: false,
-    error: null,
-  }; // Mocked addToCart hook, replace with actual hook
-
-  const {
-    mutate: decreaseQuantity,
-    isPending: isLoading2,
-    error: err,
-  } = { mutate: (id: string) => {}, isPending: false, error: null }; // Mocked useRemoveFromCart hook, replace with actual hook
-  const hasError = !!error || !!err;
-  if (hasError) {
-    return (
-      <Card
-        className='hover:shadow-md transition-shadow duration-200'
-        radius='none'
-        shadow='sm'>
-        <CardBody>
-          <div className='text-red-500 text-center'>
-            {(error as unknown as Error)?.message ||
-              (err as unknown as Error)?.message ||
-              'An error occurred'}
-          </div>
-        </CardBody>
-      </Card>
-    );
-  }
-  const isPending = isLoading || isLoading2;
-  const handleAddToCart = () => {
-    addToCart(item.product._id.toString());
-  };
-  const handleDecreaseQuantity = () => {
-    decreaseQuantity(item.product._id.toString());
-  };
   const product = item.product;
   const totalPrice = product.price * item.quantity;
+
   return (
     <Card
       className='hover:shadow-md transition-shadow duration-200'
@@ -86,17 +43,13 @@ export default function CartItemCard({
                   <>
                     <Button
                       color='primary'
-                      disabled={isPending}
-                      size='sm'
-                      onPress={handleDecreaseQuantity}>
+                      size='sm'>
                       <FaMinus size={12} />
                     </Button>
                     <p>{item.quantity}</p>
                     <Button
                       color='primary'
-                      disabled={isPending}
-                      size='sm'
-                      onPress={handleAddToCart}>
+                      size='sm'>
                       <FaPlus size={12} />
                     </Button>
                   </>

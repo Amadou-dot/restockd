@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { ProductInput } from '../../types/Product';
+import { ProductInput } from '../types/Product';
 
 const Schema = mongoose.Schema;
 

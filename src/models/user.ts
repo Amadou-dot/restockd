@@ -1,12 +1,11 @@
+import { Order } from '@/models/order';
+import { Product } from '@/models/product';
+import type { CartItem, PopulatedCart } from '@/types/Cart';
+import type { OrderItem } from '@/types/Order';
+import type { Product as IProduct } from '@/types/Product';
+import type { IUserDocument } from '@/types/User';
+import { PRODUCTS_PER_PAGE } from '@/utils/constants';
 import mongoose from 'mongoose';
-import type { IUserDocument } from '../../types/User.js';
-import { PRODUCTS_PER_PAGE } from '../utils/constants.js';
-import { NotFoundError } from '../utils/errors.js';
-import { Order } from './order.js';
-import { Product } from './product.js';
-import type { CartItem, PopulatedCart } from '../../types/Cart.js';
-import type { Product as IProduct } from '../../types/Product.js';
-import { OrderItem } from '../../types/Order.js';
 
 const Schema = mongoose.Schema;
 
@@ -196,7 +195,7 @@ userSchema.methods.deleteItemFromCart = async function (
     (item: CartItem) => item.productId.toString() === productId.toString()
   );
 
-  if (itemIndex === -1) throw new NotFoundError('Item not found in cart'); // Item not found in cart
+  if (itemIndex === -1) throw new Error('Item not found in cart'); // Item not found in cart
 
   const productPrice = await Product.findById(productId).select('price');
 
@@ -292,4 +291,5 @@ userSchema.methods.getCreatedProducts = async function (
 };
 
 export const User =
-  mongoose.models.User || mongoose.model<IUserDocument>('User', userSchema);
+  (mongoose.models.User as unknown as IUserDocument) ||
+  mongoose.model<IUserDocument>('User', userSchema);

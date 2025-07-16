@@ -1,7 +1,7 @@
 import { Button } from '@heroui/button';
-import { Order } from '../../types/Order';
+import { OrderDocument } from '../types/Order';
 
-export default function OrderCard({ order }: { order: Order }) {
+export default function OrderCard({ order }: { order: OrderDocument }) {
   const { data: invoiceData } = {data: { invoiceUrl: 'https://example.com/invoice.pdf' }}; // Mocked invoice data
 
   const handleInvoiceDownload = () => {

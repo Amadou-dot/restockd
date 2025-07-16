@@ -15,7 +15,14 @@ export interface OrderInput {
 
 // Order interface for client
 export interface Order extends OrderInput {
-  // _id: string;
+  createdAt: Date;
+  totalPrice: number;
+  invoiceUrl?: string; // Optional invoice URL
+}
+
+// Order interface for MongoDB documents
+export interface OrderDocument extends OrderInput {
+  _id: string;
   createdAt: Date;
   totalPrice: number;
   invoiceUrl?: string; // Optional invoice URL

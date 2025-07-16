@@ -1,12 +1,12 @@
 import { Button } from '@heroui/button';
-import { usePlaceOrder } from '../../api/orders';
+import { usePlaceOrder } from '../../hooks/useOrders';
 
 export default function PlaceOrderBtn() {
   const { mutate: placeOrder, isPending, isError } = usePlaceOrder();
   
   const handlePlaceOrder = async () => {
     placeOrder(undefined, {
-      onSuccess: (data) => {
+      onSuccess: (data: { url?: string }) => {
         // Redirect to Stripe checkout URL
         if (data?.url) {
           window.location.href = data.url;

@@ -11,17 +11,19 @@ import {
  * @returns The full S3 URL of the uploaded file
  */
 export const uploadImageToS3Bucket = async (
-  file: Express.Multer.File
+  file: File
 ): Promise<string> => {
   const client = new S3Client();
-  const key = `products/${Date.now()}_${file.originalname}`;
+  const key = `products/${Date.now()}_${file.name}`;
   const bucketName = process.env.AWS_S3_BUCKET_NAME || '';
+
+  const buffer = await file.arrayBuffer();
 
   const command = new PutObjectCommand({
     Bucket: bucketName,
     Key: key,
-    Body: file.buffer,
-    ContentType: file.mimetype,
+    Body: new Uint8Array(buffer),
+    ContentType: file.type,
   });
 
   try {

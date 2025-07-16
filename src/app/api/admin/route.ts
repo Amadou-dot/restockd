@@ -1,12 +1,9 @@
+import { Product } from '@/models/product';
+import { PRODUCTS_PER_PAGE } from '@/utils/constants';
 import { NextRequest, NextResponse } from 'next/server';
-import { Product } from '../../../models/product';
-import { initializeDatabase } from '../../../lib/mongoose';
-import { PRODUCTS_PER_PAGE } from '../../../utils/constants';
 
 export async function GET(request: NextRequest) {
   try {
-    await initializeDatabase();
-
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
 

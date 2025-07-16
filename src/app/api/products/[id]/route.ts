@@ -1,17 +1,16 @@
+import { initializeDatabase } from '@/lib/mongoose';
 import { NextRequest, NextResponse } from 'next/server';
-import { initializeDatabase } from '../../../../lib/mongoose';
 import { Product } from '../../../../models/product';
 
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    await initializeDatabase();
+    initializeDatabase();
+    const { id } = await params;
 
-    const productId = params.id;
-
-    if (!productId) {
+    if (!id) {
       return NextResponse.json(
         {
           message: 'Product ID is required',
@@ -21,7 +20,7 @@ export async function GET(
       );
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(id);
 
     if (!product) {
       return NextResponse.json(

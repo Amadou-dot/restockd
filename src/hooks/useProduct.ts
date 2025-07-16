@@ -8,7 +8,7 @@ export const useProduct = (id: string) => {
     queryFn: () => fetchProduct(id),
     enabled: !!id, // Only run query if id is provided
     staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes (previously cacheTime)
+    gcTime: 10 * 60 * 1000, // 10 minutes (cacheTime)
     retry: (failureCount, error) => {
       // Don't retry on client errors (4xx)
       if (isClientError(error)) return false;

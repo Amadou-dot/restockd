@@ -1,14 +1,28 @@
 'use client';
-import ErrorMessage from '@/components/ErrorMessage';
-import { useCreateProduct } from '@/hooks/useProductMutations';
 import { Button } from '@heroui/button';
 import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { NumberInput } from '@heroui/number-input';
 import { useState } from 'react';
+import ErrorMessage from './ErrorMessage';
 
-export default function AddProductPage() {
-  const { mutate: createProduct, isPending, error } = useCreateProduct();
+interface CreateProductFormProps {
+  onSubmit: (formData: FormData, target?: HTMLFormElement) => void;
+  isPending?: boolean;
+  error?: Error | null;
+  submitButtonText?: string;
+  showError?: boolean;
+  className?: string;
+}
+
+export default function CreateProductForm({
+  onSubmit,
+  isPending = false,
+  error,
+  submitButtonText = 'Create Product',
+  showError = true,
+  className = 'flex flex-col gap-4',
+}: CreateProductFormProps) {
   const [productName, setProductName] = useState('');
   const [productPrice, setProductPrice] = useState(0);
   const [productDesc, setProductDesc] = useState('');
@@ -21,6 +35,7 @@ export default function AddProductPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const target = e.currentTarget;
     if (isPending) return;
 
     const formData = new FormData();
@@ -32,7 +47,7 @@ export default function AddProductPage() {
       formData.append('image', image);
     }
 
-    createProduct(formData, { onSuccess: () => resetForm() });
+    onSubmit(formData, target);
   };
 
   const resetForm = () => {
@@ -44,10 +59,10 @@ export default function AddProductPage() {
 
   return (
     <Form
+      className={className}
       encType='multipart/form-data'
-      onSubmit={handleSubmit}
-      className='max-w-4xl flex flex-col gap-4 mx-auto'>
-      {error && <ErrorMessage description={error.message} />}
+      onSubmit={handleSubmit}>
+      {showError && error && <ErrorMessage description={error.message} />}
 
       <Input
         autoFocus
@@ -76,7 +91,6 @@ export default function AddProductPage() {
         radius='sm'
         value={productPrice}
         variant='bordered'
-        autoComplete='off'
         startContent={
           <span className='text-gray-500 pointer-events-none'>$</span>
         }
@@ -127,7 +141,7 @@ export default function AddProductPage() {
           radius='sm'
           size='lg'
           type='submit'>
-          {isPending ? 'Creating...' : 'Create Product'}
+          {submitButtonText}
         </Button>
       </div>
     </Form>

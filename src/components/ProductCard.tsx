@@ -3,7 +3,7 @@ import { Image } from '@heroui/image';
 import { Spinner } from '@heroui/spinner';
 import { redirect, RedirectType } from 'next/navigation';
 import { IoHeartOutline } from 'react-icons/io5';
-import type { Product } from '../../types/Product';
+import type { Product } from '../types/Product';
 import AddToCartButton from './ui/AddToCartButton';
 const TEXTCUT_LENGTH = 190;
 

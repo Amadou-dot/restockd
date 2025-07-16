@@ -1,17 +1,33 @@
-'use client';
-import ErrorMessage from '@/components/ErrorMessage';
-import { useCreateProduct } from '@/hooks/useProductMutations';
 import { Button } from '@heroui/button';
 import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { NumberInput } from '@heroui/number-input';
 import { useState } from 'react';
+import { Product } from '../types/Product';
+import ErrorMessage from './ErrorMessage';
 
-export default function AddProductPage() {
-  const { mutate: createProduct, isPending, error } = useCreateProduct();
-  const [productName, setProductName] = useState('');
-  const [productPrice, setProductPrice] = useState(0);
-  const [productDesc, setProductDesc] = useState('');
+interface EditProductFormProps {
+  product: Product;
+  onSubmit: (formData: FormData) => void;
+  isPending?: boolean;
+  error?: Error | null;
+  submitButtonText?: string;
+  showError?: boolean;
+  className?: string;
+}
+
+export default function EditProductForm({
+  product,
+  onSubmit,
+  isPending = false,
+  error,
+  submitButtonText = 'Save Changes',
+  showError = true,
+  className = 'flex flex-col gap-4',
+}: EditProductFormProps) {
+  const [productName, setProductName] = useState(product.name);
+  const [productPrice, setProductPrice] = useState(product.price);
+  const [productDesc, setProductDesc] = useState(product.description);
   const [image, setImage] = useState<File | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,27 +43,23 @@ export default function AddProductPage() {
     formData.append('name', productName);
     formData.append('price', productPrice.toString());
     formData.append('description', productDesc);
+    formData.append('_id', product._id);
+    formData.append('userId', product.userId);
 
+    // Only append image if a new one is selected
     if (image) {
       formData.append('image', image);
     }
 
-    createProduct(formData, { onSuccess: () => resetForm() });
-  };
-
-  const resetForm = () => {
-    setProductName('');
-    setProductPrice(0);
-    setProductDesc('');
-    setImage(null);
+    onSubmit(formData);
   };
 
   return (
     <Form
+      className={className}
       encType='multipart/form-data'
-      onSubmit={handleSubmit}
-      className='max-w-4xl flex flex-col gap-4 mx-auto'>
-      {error && <ErrorMessage description={error.message} />}
+      onSubmit={handleSubmit}>
+      {showError && error && <ErrorMessage description={error.message} />}
 
       <Input
         autoFocus
@@ -76,7 +88,6 @@ export default function AddProductPage() {
         radius='sm'
         value={productPrice}
         variant='bordered'
-        autoComplete='off'
         startContent={
           <span className='text-gray-500 pointer-events-none'>$</span>
         }
@@ -100,9 +111,7 @@ export default function AddProductPage() {
       <Input
         accept='image/jpeg,image/png,image/jpg'
         disabled={isPending}
-        errorMessage='An image is required'
-        isRequired
-        label='Image'
+        label='Image (optional - leave empty to keep current image)'
         labelPlacement='outside'
         name='image'
         radius='sm'
@@ -111,25 +120,15 @@ export default function AddProductPage() {
         onChange={handleFileChange}
       />
 
-      <div className='flex gap-2 self-end'>
-        <Button
-          color='default'
-          disabled={isPending}
-          radius='sm'
-          size='lg'
-          variant='bordered'
-          onPress={resetForm}>
-          Reset
-        </Button>
-        <Button
-          color='primary'
-          isLoading={isPending}
-          radius='sm'
-          size='lg'
-          type='submit'>
-          {isPending ? 'Creating...' : 'Create Product'}
-        </Button>
-      </div>
+      <Button
+        className='self-end'
+        color='primary'
+        isLoading={isPending}
+        radius='sm'
+        size='lg'
+        type='submit'>
+        {submitButtonText}
+      </Button>
     </Form>
   );
 }

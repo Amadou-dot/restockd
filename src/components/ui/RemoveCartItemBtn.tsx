@@ -1,5 +1,4 @@
 import { Button } from '@heroui/button';
-import { addToast } from '@heroui/toast';
 import { FaTrash } from 'react-icons/fa6';
 
 export default function RemoveCartItemBtn({
@@ -7,26 +6,18 @@ export default function RemoveCartItemBtn({
 }: {
   productId: string;
 }) {
-  const {
-    mutate: removeItemFromCart,
-    isPending,
-    error,
-  } = { mutate: (id: string) => {}, isPending: false, error: null }; // Mocked mutation
-  if (error)
-    addToast({
-      title: 'Error',
-      description: (error as unknown as Error)?.message || 'An error occurred',
-      color: 'warning',
-    });
+  const handleRemoveFromCart = () => {
+    console.log(`Removing product ${productId} from cart`);
+  };
   return (
     <Button
       color='danger'
-      isLoading={isPending}
+      // isLoading={isPending}
       radius='sm'
       size='sm'
       startContent={<FaTrash />}
       variant='light'
-      onPress={() => removeItemFromCart(productId)}>
+      onPress={handleRemoveFromCart}>
       Remove
     </Button>
   );

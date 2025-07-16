@@ -1,6 +1,6 @@
+import ErrorBoundary from '@/components/ErrorBoundary';
 import NavigationBar from '@/components/NavigationBar';
 import QueryProvider from '@/components/QueryProvider';
-import ErrorBoundary from '@/components/ErrorBoundary';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -35,7 +35,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <QueryProvider>
             <NavigationBar />
-            {children}
+            <main className='p-8 min-h-screen'>{children}</main>
           </QueryProvider>
         </ErrorBoundary>
       </body>

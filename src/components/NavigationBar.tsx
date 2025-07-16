@@ -71,7 +71,7 @@ export default function NavigationBar() {
         />
         <NavbarBrand>
           <AcmeLogo />
-          <p className='font-bold text-inherit select-none'>Restock'd</p>
+          <p className='font-bold text-inherit select-none'>Restock&apos;d</p>
         </NavbarBrand>
       </NavbarContent>
 
