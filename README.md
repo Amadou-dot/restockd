@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+# Restock'd - Modern E-commerce Platform
+
+A comprehensive e-commerce platform built with Next.js 15, featuring product management, user authentication, and modern UI components.
+
+## Project Structure
+
+```
+restock-d/
+├── src/
+│   ├── app/                    # Next.js 15 App Router
+│   │   ├── layout.tsx         # Root layout with metadata
+│   │   ├── page.tsx           # Home page
+│   │   ├── loading.tsx        # Loading UI
+│   │   ├── products/          # Products pages
+│   │   │   └── page.tsx       # Products listing
+│   │   ├── api/               # API routes
+│   │   │   └── products/      # Product API endpoints
+│   │   ├── favicon.ico        # App favicon
+│   │   └── icon.png           # App icon
+│   ├── components/            # Reusable UI components
+│   ├── hooks/                 # Custom React hooks
+│   ├── lib/                   # Utility libraries
+│   │   ├── api.ts             # API client
+│   │   └── queryHelpers.ts    # React Query utilities
+│   └── utils/                 # Utility functions
+│       ├── AWSBucket.ts       # AWS S3 file operations
+│       ├── sendPasswordResetEmail.ts  # Email utilities
+│       └── sendWelcomeEmail.ts        # Welcome email service
+├── .next/                     # Next.js build output
+├── node_modules/              # Dependencies
+├── .env                       # Environment variables
+├── .gitignore                 # Git ignore rules
+├── package.json               # Project dependencies
+├── README.md                  # This file
+└── REACT_QUERY_SETUP.md       # React Query documentation
+```
+
+## Features
+
+- **Next.js 15 App Router** - Modern routing with server components
+- **React Query/TanStack Query** - Data fetching and caching
+- **TypeScript** - Type-safe development
+- **AWS S3 Integration** - File and image storage
+- **Email Services** - Password reset and welcome emails
+- **Responsive Design** - Mobile-first approach
+- **Authentication** - User management system
+- **Product Management** - CRUD operations for products
+
+## Tech Stack
+
+- **Framework**: Next.js 15
+- **Language**: TypeScript
+- **State Management**: React Query/TanStack Query
+- **Styling**: CSS with responsive design
+- **Database**: (Database configuration not shown in current structure)
+- **Cloud Storage**: AWS S3
+- **Email Service**: Resend
+- **Development Tools**: ESLint, Prettier
 
 ## Getting Started
 
-First, run the development server:
+1. **Install dependencies**
+    ```bash
+    pnpm install
+    ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+2. **Set up environment variables**
+    ```bash
+    cp .env.example .env
+    ```
+
+3. **Run development server**
+    ```bash
+    pnpm dev
+    ```
+
+4. **Open your browser**
+    Navigate to `http://localhost:3000`
+
+## Environment Variables
+
+Create a `.env` file with the following variables:
+
+```env
+# App Configuration
+APP_NAME=Restock'd
+CLIENT_URL=http://localhost:3000
+
+# AWS S3
+AWS_S3_BUCKET_NAME=your-bucket-name
+AWS_REGION=us-east-1
+
+# Email Service
+RESEND_API_KEY=your-resend-api-key
+EMAIL_FROM=noreply@yourapp.com
+
+# Database
+DATABASE_URL=your-database-url
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **React Query DevTools** - Available in development mode
+- **Hot Module Replacement** - Instant updates during development
+- **TypeScript** - Full type checking and IntelliSense
+- **Error Boundaries** - Graceful error handling
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment
 
-## Learn More
+The application is optimized for deployment on Vercel:
 
-To learn more about Next.js, take a look at the following resources:
+1. Connect your repository to Vercel
+2. Set up environment variables in Vercel dashboard
+3. Deploy automatically on push to main branch
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is licensed under the MIT License.
