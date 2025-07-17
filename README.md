@@ -83,20 +83,26 @@ restock-d/
 Create a `.env` file with the following variables:
 
 ```env
-# App Configuration
-APP_NAME=Restock'd
-CLIENT_URL=http://localhost:3000
+# Database Configuration
+MONGODB_URI=your_mongodb_uri
 
-# AWS S3
-AWS_S3_BUCKET_NAME=your-bucket-name
-AWS_REGION=us-east-1
+# Session Configuration
+SESSION_SECRET=session_secret
 
-# Email Service
-RESEND_API_KEY=your-resend-api-key
-EMAIL_FROM=noreply@yourapp.com
+# Server Configuration
+PORT=3000
+AWS_SECRET_ACCESS_KEY=your_aws_access_key
+AWS_ACCESS_KEY_ID=your_aws_access_key_id
+RESEND_API_KEY=your_resend_api_key
+AWS_S3_BUCKET_NAME=your_aws_bucket_name
+AWS_REGION=your_aws_region
+STRIPE_SECRET_KEY=your_stripe_key
 
-# Database
-DATABASE_URL=your-database-url
+# Client Configuration
+CLIENT_URL=your_client_url
+
+EMAIL_FROM=noreply@domain.com
+APP_NAME=your_app_name
 ```
 
 ## Development
