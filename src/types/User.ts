@@ -90,4 +90,11 @@ export interface IUserDocument extends User, Document {
     totalProducts: number;
     currentPage: number;
   }>;
+
+  /**
+   * Retrieves the count of products created by the user.
+   * @return {Promise<number>} A promise that resolves to the total count of created products.
+   * @throws {Error} If there are issues retrieving the count.
+   */
+  getCreatedProductsCount(): Promise<number>;
 }
