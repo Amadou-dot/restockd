@@ -1,4 +1,5 @@
-import { Product } from '@/models/product';
+import { User } from '@/models/user';
+import { IUserDocument } from '@/types/User';
 import { PRODUCTS_PER_PAGE } from '@/utils/constants';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -6,14 +7,14 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
+    const user = (await User.findById(
+      '6865e7611f740a3fd8c1ecb6'
+    )) as IUserDocument;
 
-    const totalProducts = await Product.countDocuments({});
+    const totalProducts = await user.getCreatedProductsCount();
     const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);
 
-    const products = await Product.find({})
-      .skip(page > 0 ? (page - 1) * PRODUCTS_PER_PAGE : 0)
-      .limit(PRODUCTS_PER_PAGE)
-      .sort({ createdAt: -1 });
+    const products = await user.getCreatedProducts(page);
 
     const response = {
       products,

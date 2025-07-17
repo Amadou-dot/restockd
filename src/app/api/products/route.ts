@@ -1,6 +1,7 @@
+import { ProductsResponse } from '@/types/Product';
 import { NextRequest, NextResponse } from 'next/server';
-import { Product } from '../../../models/product';
 import { initializeDatabase } from '../../../lib/mongoose';
+import { Product } from '../../../models/product';
 import { PRODUCTS_PER_PAGE } from '../../../utils/constants';
 
 export async function GET(request: NextRequest) {
@@ -16,9 +17,9 @@ export async function GET(request: NextRequest) {
     const products = await Product.find({})
       .skip(page > 0 ? (page - 1) * PRODUCTS_PER_PAGE : 0)
       .limit(PRODUCTS_PER_PAGE)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1, _id: -1 });
 
-    const response = {
+    const response: ProductsResponse = {
       products,
       totalPages: totalPages > 0 ? totalPages : 0,
       totalProducts,

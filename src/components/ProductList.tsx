@@ -75,11 +75,12 @@ export default function ProductList({
       </div>
     );
   }
+  // Fallback in case no conditions are met
   return (
     <>
       <div className='flex flex-wrap gap-12'>
         <Message title='No Products Found' />
       </div>
     </>
-  ); // Fallback in case no conditions are met
+  ); 
 }
