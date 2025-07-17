@@ -280,7 +280,7 @@ userSchema.methods.getCreatedProducts = async function (
   const products = await Product.find({ userId: this._id })
     .skip(page > 0 ? (page - 1) * PRODUCTS_PER_PAGE : 0)
     .limit(PRODUCTS_PER_PAGE)
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1, _id: -1 });
 
   return {
     products,
@@ -288,6 +288,13 @@ userSchema.methods.getCreatedProducts = async function (
     totalProducts,
     currentPage: page,
   };
+};
+
+userSchema.methods.getCreatedProductsCount = async function (
+  this: IUserDocument
+) {
+  // Get total count of products created by this user
+  return await Product.find({ userId: this._id }).countDocuments();
 };
 
 export const User =
