@@ -1,7 +1,9 @@
 import { initializeDatabase } from '@/lib/mongoose';
 import { Product } from '@/models/product';
-import { NextRequest, NextResponse } from 'next/server';
 import type { Product as ProductType } from '@/types/Product';
+import { uploadImageToS3Bucket } from '@/utils/AWSBucket';
+import { NextRequest, NextResponse } from 'next/server';
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -35,9 +37,8 @@ export async function PUT(
 
     // Only update image if a new one is provided
     if (image && image.size > 0) {
-      // TODO: Handle file upload to S3 or your storage service
-      // For now, we'll just use the filename
-      updateData.image = image.name;
+      const imageURL = await uploadImageToS3Bucket(image);
+      updateData.image = imageURL;
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(

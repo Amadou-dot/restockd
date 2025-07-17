@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { productKeys } from '../lib/api';
+import { adminProductKeys } from '../lib/api';
 
 const ADMIN_API_BASE = '/api/admin';
 
@@ -22,7 +22,7 @@ export const useCreateProduct = () => {
     },
     onSuccess: () => {
       // Invalidate and refetch products list
-      queryClient.invalidateQueries({ queryKey: productKeys.all });
+      queryClient.invalidateQueries({ queryKey: adminProductKeys.all });
     },
   });
 };
@@ -46,9 +46,9 @@ export const useUpdateProduct = () => {
     onSuccess: (_data, variables) => {
       // Invalidate specific product and products list
       queryClient.invalidateQueries({
-        queryKey: productKeys.detail(variables.id),
+        queryKey: adminProductKeys.detail(variables.id),
       });
-      queryClient.invalidateQueries({ queryKey: productKeys.all });
+      queryClient.invalidateQueries({ queryKey: adminProductKeys.all });
     },
   });
 };
@@ -58,7 +58,7 @@ export const useDeleteProduct = () => {
 
   return useMutation({
     mutationFn: async (id: string) => {
-      const response = await fetch(`/api/products/${id}`, {
+      const response = await fetch(`${ADMIN_API_BASE}/products/${id}`, {
         method: 'DELETE',
       });
 
@@ -70,7 +70,7 @@ export const useDeleteProduct = () => {
     },
     onSuccess: () => {
       // Invalidate products list
-      queryClient.invalidateQueries({ queryKey: productKeys.all });
+      queryClient.invalidateQueries({ queryKey: adminProductKeys.all });
     },
   });
 };
