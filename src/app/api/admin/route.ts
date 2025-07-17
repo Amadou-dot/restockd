@@ -1,5 +1,3 @@
-import { User } from '@/models/user';
-import { IUserDocument } from '@/types/User';
 import { PRODUCTS_PER_PAGE } from '@/utils/constants';
 import { getUser } from '@/utils/getUser';
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,7 +7,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
     const user = await getUser(request);
-    
+
     if (!user) {
       return NextResponse.json(
         {

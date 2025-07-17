@@ -1,7 +1,5 @@
 import { initializeDatabase } from '@/lib/mongoose';
-import { User } from '@/models/user';
 import { PopulatedCartItem } from '@/types/Cart';
-import { IUserDocument } from '@/types/User';
 import { getUser } from '@/utils/getUser';
 import { NextRequest, NextResponse } from 'next/server';
 
