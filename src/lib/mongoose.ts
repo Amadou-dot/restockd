@@ -11,7 +11,6 @@ export const initializeDatabase = async () => {
       );
     }
     await dbConnectionPromise;
-    console.log('Connected to MongoDB');
   } catch (error) {
     console.error(
       'Unable to connect to the database:',
