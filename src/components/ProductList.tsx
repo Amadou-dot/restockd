@@ -31,40 +31,46 @@ export default function ProductList({
 
   if (error)
     return (
-      <div className='flex flex-wrap gap-12'>
-        <ErrorMessage description={error.message} />
+      <div className='w-full max-w-7xl mx-auto px-4'>
+        <div className='flex flex-wrap gap-4 sm:gap-6 md:gap-12 justify-center'>
+          <ErrorMessage description={error.message} />
+        </div>
       </div>
     );
 
   if (isPending && !error) {
     return (
-      <div className='flex flex-wrap gap-12'>
-        <LoadingCards />
+      <div className='w-full max-w-7xl mx-auto px-4'>
+        <div className='flex flex-wrap gap-4 sm:gap-6 md:gap-12 justify-center'>
+          <LoadingCards />
+        </div>
       </div>
     );
   }
 
   if (!isPending && !error && products.length === 0) {
     return (
-      <div className='flex flex-wrap gap-12'>
-        <Message title='No Products Found' />
+      <div className='w-full max-w-7xl mx-auto px-4'>
+        <div className='flex flex-wrap gap-4 sm:gap-6 md:gap-12 justify-center'>
+          <Message title='No Products Found' />
+        </div>
       </div>
     );
   }
 
   if (!isPending && !error && products && products.length > 0) {
     return (
-      <div className='w-screen'>
-        <div className='flex flex-wrap gap-12 min-h-[650px] max-h-[650px] mb-10'>
+      <div className='w-full max-w-7xl px-4 flex flex-col'>
+        <div className='flex flex-wrap gap-4 sm:gap-6 md:gap-12 justify-center sm:justify-start mb-8 sm:mb-10'>
           {products.map(product => (
             <ProductCard key={product._id.toString()} product={product} />
           ))}
         </div>
         {!isPending && !error && totalPages > 1 && (
-          <div className='flex justify-center items-center w-full'>
+          <div className='flex justify-center items-center w-full mt-4'>
             <Pagination
               showControls
-              className='w-full self-center'
+              className='flex justify-center'
               isDisabled={isPending}
               page={page}
               total={totalPages}
@@ -77,10 +83,10 @@ export default function ProductList({
   }
   // Fallback in case no conditions are met
   return (
-    <>
-      <div className='flex flex-wrap gap-12'>
+    <div className='w-full max-w-7xl mx-auto px-4'>
+      <div className='flex flex-wrap gap-4 sm:gap-6 md:gap-12 justify-center'>
         <Message title='No Products Found' />
       </div>
-    </>
+    </div>
   ); 
 }
