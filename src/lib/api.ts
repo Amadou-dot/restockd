@@ -70,6 +70,16 @@ export const fetchCart = async (): Promise<PopulatedCart> => {
   return handleResponse<PopulatedCart>(response);
 };
 
+export const updateCartItemQuantity = async (
+  itemId: string,
+  action: 'increment' | 'decrement'
+): Promise<PopulatedCart> => {
+  const response = await fetch(`${API_BASE_URL}/cart/${itemId}/${action}`, {
+    method: 'POST',
+  });
+
+  return handleResponse<PopulatedCart>(response);
+};
 // Query keys for React Query
 export const productKeys = {
   all: ['products'] as const,

@@ -54,23 +54,32 @@ export default function ProductList({
 
   if (!isPending && !error && products && products.length > 0) {
     return (
-      <div className='flex flex-wrap gap-12'>
-        {products.map(product => (
-          <ProductCard key={product._id.toString()} product={product} />
-        ))}
-
+      <div className='w-screen'>
+        <div className='flex flex-wrap gap-12 min-h-[650px] max-h-[650px] mb-10'>
+          {products.map(product => (
+            <ProductCard key={product._id.toString()} product={product} />
+          ))}
+        </div>
         {!isPending && !error && totalPages > 1 && (
-          <Pagination
-            showControls
-            className='w-full self-center'
-            isDisabled={isPending}
-            page={page}
-            total={totalPages}
-            onChange={onPageChange ? onPageChange : undefined}
-          />
+          <div className='flex justify-center items-center w-full'>
+            <Pagination
+              showControls
+              className='w-full self-center'
+              isDisabled={isPending}
+              page={page}
+              total={totalPages}
+              onChange={onPageChange ? onPageChange : undefined}
+            />
+          </div>
         )}
       </div>
     );
   }
-  return <></>; // Fallback in case no conditions are met
+  return (
+    <>
+      <div className='flex flex-wrap gap-12'>
+        <Message title='No Products Found' />
+      </div>
+    </>
+  ); // Fallback in case no conditions are met
 }

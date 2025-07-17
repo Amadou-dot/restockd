@@ -291,5 +291,4 @@ userSchema.methods.getCreatedProducts = async function (
 };
 
 export const User =
-  (mongoose.models.User as unknown as IUserDocument) ||
-  mongoose.model<IUserDocument>('User', userSchema);
+  mongoose.models.User || mongoose.model<IUserDocument>('User', userSchema);

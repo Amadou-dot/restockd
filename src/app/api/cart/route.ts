@@ -1,19 +1,28 @@
 import { initializeDatabase } from '@/lib/mongoose';
 import { User } from '@/models/user';
+import { PopulatedCart } from '@/types/Cart';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     await initializeDatabase();
+    const user = await User.findById('6865e7611f740a3fd8c1ecb6');
 
-    const cart = await User.getPopulatedCart();
-    const response = {
-      cart,
-    };
+    if (!user) {
+      return NextResponse.json(
+        {
+          message: 'User not found',
+          error: 'User not found',
+        },
+        { status: 404 }
+      );
+    }
+
+    const cart: PopulatedCart = await user.getPopulatedCart();
 
     return NextResponse.json({
       message: 'Cart retrieved successfully',
-      data: response,
+      data: cart,
     });
   } catch (error) {
     console.error('Error fetching cart:', error);
