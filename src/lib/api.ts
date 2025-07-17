@@ -1,4 +1,5 @@
 import { PopulatedCart } from '@/types/Cart';
+import { OrderDocument } from '@/types/Order';
 import { Product } from '../types/Product';
 
 const API_BASE_URL = '/api';
@@ -50,6 +51,12 @@ export const fetchProducts = async (
 ): Promise<ProductsResponse> => {
   const response = await fetch(`${API_BASE_URL}/products?page=${page}`);
   return handleResponse<ProductsResponse>(response);
+};
+
+// fetch orders
+export const fetchOrders = async (): Promise<OrderDocument[]> => {
+  const response = await fetch(`${API_BASE_URL}/orders`);
+  return handleResponse<OrderDocument[]>(response);
 };
 
 // Fetch single product by ID

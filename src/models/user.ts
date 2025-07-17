@@ -1,7 +1,7 @@
 import { Order } from '@/models/order';
 import { Product } from '@/models/product';
 import type { CartItem, PopulatedCart } from '@/types/Cart';
-import type { OrderItem } from '@/types/Order';
+import type { OrderItem, Order as OrderType } from '@/types/Order';
 import type { Product as IProduct } from '@/types/Product';
 import type { IUserDocument } from '@/types/User';
 import { PRODUCTS_PER_PAGE } from '@/utils/constants';
@@ -262,7 +262,7 @@ userSchema.methods.placeOrder = async function (this: IUserDocument) {
 
 userSchema.methods.getOrders = async function (this: IUserDocument) {
   // Get orders from the Order collection for this user
-  const orders = await Order.find({ userId: this._id }).exec();
+  const orders: OrderType[] = await Order.find({ userId: this._id }).exec();
   return orders;
 };
 

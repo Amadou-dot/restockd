@@ -1,15 +1,23 @@
 import { User } from '@/models/user';
 import { IUserDocument } from '@/types/User';
 import { PRODUCTS_PER_PAGE } from '@/utils/constants';
+import { getUser } from '@/utils/getUser';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
-    const user = (await User.findById(
-      '6865e7611f740a3fd8c1ecb6'
-    )) as IUserDocument;
+    const user = await getUser(request);
+    
+    if (!user) {
+      return NextResponse.json(
+        {
+          message: 'User not found',
+        },
+        { status: 404 }
+      );
+    }
 
     const totalProducts = await user.getCreatedProductsCount();
     const totalPages = Math.ceil(totalProducts / PRODUCTS_PER_PAGE);

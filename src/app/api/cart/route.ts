@@ -1,12 +1,12 @@
 import { initializeDatabase } from '@/lib/mongoose';
-import { User } from '@/models/user';
 import { PopulatedCart } from '@/types/Cart';
-import { NextResponse } from 'next/server';
+import { getUser } from '@/utils/getUser';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     await initializeDatabase();
-    const user = await User.findById('6865e7611f740a3fd8c1ecb6');
+    const user = await getUser(req);
 
     if (!user) {
       return NextResponse.json(

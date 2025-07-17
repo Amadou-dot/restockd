@@ -10,8 +10,7 @@ export async function POST(request: NextRequest) {
     const price = parseFloat(formData.get('price') as string);
     const description = formData.get('description') as string;
     const image = formData.get('image') as File;
-    // const userId = formData.get('userId') as string;
-    const userId = '6865e7611f740a3fd8c1ecb6';
+    const userId = formData.get('userId') as string;
 
     if (!name || !price || !description || !image || !userId) {
       return NextResponse.json(
@@ -32,7 +31,7 @@ export async function POST(request: NextRequest) {
       price,
       description,
       image: imageUrl,
-      userId: '6865e7611f740a3fd8c1ecb6',
+      userId,
     });
 
     await newProduct.save();

@@ -1,7 +1,6 @@
 import { initializeDatabase } from '@/lib/mongoose';
-import { User } from '@/models/user';
 import { PopulatedCartItem } from '@/types/Cart';
-import { IUserDocument } from '@/types/User';
+import { getUser } from '@/utils/getUser';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(
@@ -22,9 +21,7 @@ export async function POST(
       );
     }
 
-    const user = (await User.findById(
-      '6865e7611f740a3fd8c1ecb6'
-    )) as IUserDocument;
+    const user = await getUser(request);
     if (!user) {
       return NextResponse.json(
         {

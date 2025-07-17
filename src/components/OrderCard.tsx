@@ -2,11 +2,11 @@ import { Button } from '@heroui/button';
 import { OrderDocument } from '../types/Order';
 
 export default function OrderCard({ order }: { order: OrderDocument }) {
-  const { data: invoiceData } = {data: { invoiceUrl: 'https://example.com/invoice.pdf' }}; // Mocked invoice data
+  const invoiceURL = order.invoiceUrl;
 
   const handleInvoiceDownload = () => {
-    if (invoiceData?.invoiceUrl) {
-      window.open(invoiceData.invoiceUrl, '_blank');
+    if (invoiceURL) {
+      window.open(invoiceURL, '_blank');
     }
   };
 
@@ -29,11 +29,11 @@ export default function OrderCard({ order }: { order: OrderDocument }) {
       <div className='mt-4 w-full flex justify-end'>
         <Button
           color='primary'
-          disabled={!invoiceData?.invoiceUrl}
+          disabled={!invoiceURL}
           radius='sm'
           size='sm'
           onPress={handleInvoiceDownload}>
-          {invoiceData?.invoiceUrl ? 'View Invoice' : 'Generating Invoice...'}
+          {invoiceURL ? 'View Invoice' : 'Generating Invoice...'}
         </Button>
       </div>
     </div>
