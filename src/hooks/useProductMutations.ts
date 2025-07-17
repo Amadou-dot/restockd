@@ -2,7 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { productKeys } from '../lib/api';
 
 const ADMIN_API_BASE = '/api/admin';
-// Future mutation hooks for CRUD operations
+
+// Mutation hooks for CRUD operations
 export const useCreateProduct = () => {
   const queryClient = useQueryClient();
 

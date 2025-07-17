@@ -1,14 +1,17 @@
 import { Product } from '@/models/product';
+import { uploadImageToS3Bucket } from '@/utils/AWSBucket';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
+    console.log('Form data received:', formData);
     const name = formData.get('name') as string;
     const price = parseFloat(formData.get('price') as string);
     const description = formData.get('description') as string;
     const image = formData.get('image') as File;
-    const userId = formData.get('userId') as string;
+    // const userId = formData.get('userId') as string;
+    const userId = '6865e7611f740a3fd8c1ecb6';
 
     if (!name || !price || !description || !image || !userId) {
       return NextResponse.json(
@@ -22,14 +25,14 @@ export async function POST(request: NextRequest) {
 
     // TODO: Handle file upload to S3 or your storage service
     // For now, we'll just use the filename
-    const imagePath = image.name;
+    const imageUrl = await uploadImageToS3Bucket(image);
 
     const newProduct = new Product({
       name,
       price,
       description,
-      image: imagePath,
-      userId:'6865e7611f740a3fd8c1ecb6',
+      image: imageUrl,
+      userId: '6865e7611f740a3fd8c1ecb6',
     });
 
     await newProduct.save();
