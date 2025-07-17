@@ -1,13 +1,10 @@
 import { ObjectId } from 'mongoose';
+import type { CartItem } from './Cart';
 
-export interface OrderItem {
+export interface OrderItem extends CartItem {
   productName: string;
   productPrice: number;
   image_url: string;
-  productId: string;
-  quantity: number;
-  dateAdded: string;
-  _id: string;
 }
 
 export interface OrderInput {
