@@ -1,7 +1,7 @@
 'use client';
 import ErrorMessage from '@/components/ErrorMessage';
 import { useCreateProduct } from '@/hooks/useProductMutations';
-import { Button, PressEvent } from '@heroui/button';
+import { Button } from '@heroui/button';
 import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { NumberInput } from '@heroui/number-input';
