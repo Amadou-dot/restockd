@@ -1,6 +1,7 @@
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NavigationBar from '@/components/NavigationBar';
 import QueryProvider from '@/components/QueryProvider';
+import { ToastProvider } from '@heroui/toast';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
@@ -34,6 +35,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ErrorBoundary>
           <QueryProvider>
+            <ToastProvider placement='bottom-center' />
             <NavigationBar />
             <main className='p-8 min-h-screen'>{children}</main>
           </QueryProvider>
