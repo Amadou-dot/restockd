@@ -11,7 +11,7 @@ export default function CheckoutPageLink() {
       size='lg'
       href='/checkout'
       type='button'>
-      Go to Checkout
+      Checkout
     </Button>
   );
 }
