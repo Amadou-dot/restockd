@@ -42,8 +42,8 @@ export default function CartItemCard({
               radius='none'
               shadow='sm'
               src={product.image}
-              width={120}
-              height={160}
+              width={140}
+              height={200}
             />
           </div>
 
@@ -69,7 +69,7 @@ export default function CartItemCard({
               </div>
 
               {/* Description */}
-              <p className='text-sm text-gray-200 line-clamp-2'>
+              <p className='text-sm text-gray-200 line-clamp-2 mb-6'>
                 {product.description}
               </p>
 

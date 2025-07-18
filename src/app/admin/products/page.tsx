@@ -47,35 +47,39 @@ export default function AdminProductPage() {
     <>
       <title>Admin Products</title>
       <meta content='Manage your products' name='description' />
-      <div className='flex flex-wrap gap-8'>
-        {isPending && <LoadingCards />}
-        {!isPending &&
-          !error &&
-          products &&
-          products.length > 0 &&
-          products.map(product => (
-            <AdminProductCard key={product._id.toString()} product={product} />
-          ))}
+      <div className='w-full max-w-7xl px-4 flex flex-col'>
+        <div className='flex flex-wrap gap-4 sm:gap-6 md:gap-8 justify-center sm:justify-start mb-8 sm:mb-10'>
+          {isPending && <LoadingCards />}
+          {!isPending &&
+            !error &&
+            products &&
+            products.length > 0 &&
+            products.map(product => (
+              <AdminProductCard key={product._id.toString()} product={product} />
+            ))}
 
-        {!isPending && !error && products.length === 0 && (
-          <Message
-            description='You have not added any products yet.'
-            // title='No Products Found'
-          />
+          {!isPending && !error && products.length === 0 && (
+            <Message
+              description='You have not added any products yet.'
+              // title='No Products Found'
+            />
+          )}
+
+          {!isPending && error && <ErrorMessage description={error.message} />}
+        </div>
+        {!isPending && !error && totalPages > 1 && (
+          <div className='flex justify-center items-center w-full mt-4'>
+            <Pagination
+              showControls
+              className='flex justify-center'
+              isDisabled={isPending}
+              page={currentPage}
+              total={totalPages}
+              onChange={handlePageChange}
+            />
+          </div>
         )}
-
-        {!isPending && error && <ErrorMessage description={error.message} />}
       </div>
-      {!isPending && !error && totalPages > 1 && (
-        <Pagination
-          showControls
-          className='w-full self-center'
-          isDisabled={isPending}
-          page={currentPage}
-          total={totalPages}
-          onChange={handlePageChange}
-        />
-      )}
     </>
   );
 }

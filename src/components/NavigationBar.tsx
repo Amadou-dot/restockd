@@ -63,7 +63,25 @@ export default function NavigationBar() {
   };
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar
+      onMenuOpenChange={setIsMenuOpen}
+      isBordered
+      classNames={{
+        item: [
+          'flex',
+          'relative',
+          'h-full',
+          'items-center',
+          "data-[active=true]:after:content-['']",
+          'data-[active=true]:after:absolute',
+          'data-[active=true]:after:bottom-0',
+          'data-[active=true]:after:left-0',
+          'data-[active=true]:after:right-0',
+          'data-[active=true]:after:h-[2px]',
+          'data-[active=true]:after:rounded-[2px]',
+          'data-[active=true]:after:bg-primary',
+        ],
+      }}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Close menu' : 'Open menu'}
@@ -74,17 +92,15 @@ export default function NavigationBar() {
           <p className='font-bold text-inherit select-none'>Restock&apos;d</p>
         </NavbarBrand>
       </NavbarContent>
-
       <NavbarContent className='hidden sm:flex gap-4' justify='center'>
         {menuItems.map(({ title, to }) => (
           <NavbarItem key={to} isActive={path === to}>
-            <Link className='w-full' color='foreground' href={to}>
+            <Link className='w-full' href={to} color='foreground'>
               {title}
             </Link>
           </NavbarItem>
         ))}
       </NavbarContent>
-
       <NavbarContent justify='end'>
         {isLoading ? (
           <NavbarItem>
@@ -124,11 +140,12 @@ export default function NavigationBar() {
           </>
         )}
       </NavbarContent>
-
+      {/* Mobile menu */}
       <NavbarMenu>
         {menuItems.map(({ title, to }, index) => (
           <NavbarMenuItem key={`${to}-${index}`} isActive={path === to}>
             <Link
+              onClick={() => setIsMenuOpen(false)}
               className='w-full'
               href={to}
               color={
@@ -150,6 +167,7 @@ export default function NavigationBar() {
               color='danger'
               isLoading={isLoggingOut}
               variant='light'
+              radius='sm'
               onPress={handleLogout}>
               {isLoggingOut ? 'Logging out...' : 'Logout'}
             </Button>

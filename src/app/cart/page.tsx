@@ -37,21 +37,17 @@ export default function Cart() {
       {isLoading && !error && <Spinner title='Loading cart...' />}
       {error && <Alert description={error.message} title='Error' />}
       {!isLoading && cart && cart.items && (
-        <div className='max-w-4xl mx-auto p-6'>
+        <div className='max-w-5xl mx-auto p-6'>
           {cart.items.length === 0 ? (
             <div className='text-center'>
               <Alert color='primary' description='Your cart is empty.' />
             </div>
           ) : (
             <div>
-              {' '}
               <div className='mb-6 flex items-center justify-between'>
-                <h2 className='text-2xl font-bold '>
-                  Shopping Cart ({cart.items.length}{' '}
-                  {cart.items.length === 1 ? 'item' : 'items'})
-                </h2>
+                <h2 className='text-2xl font-bold '>Shopping Cart</h2>
                 <div className='text-right'>
-                  <p className='text-sm'>Total</p>
+                  <p className='text-sm'>Subtotal</p>
                   <p className='text-2xl font-bold '>
                     ${cart.totalPrice.toFixed(2)}
                   </p>

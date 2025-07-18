@@ -1,7 +1,7 @@
 'use client';
 import ErrorMessage from '@/components/ErrorMessage';
 import { useCreateProduct } from '@/hooks/useProductMutations';
-import { Button } from '@heroui/button';
+import { Button, PressEvent } from '@heroui/button';
 import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { NumberInput } from '@heroui/number-input';
@@ -46,7 +46,7 @@ export default function AddProductPage() {
     <Form
       encType='multipart/form-data'
       onSubmit={handleSubmit}
-      className='max-w-4xl flex flex-col gap-4 mx-auto'>
+      className='max-w-3xl flex flex-col gap-4 mx-auto max-h-[90vh]'>
       {error && <ErrorMessage description={error.message} />}
 
       <Input
@@ -95,6 +95,7 @@ export default function AddProductPage() {
         value={productDesc}
         variant='bordered'
         onValueChange={setProductDesc}
+        minRows={4}
       />
 
       <Input
@@ -111,7 +112,7 @@ export default function AddProductPage() {
         onChange={handleFileChange}
       />
 
-      <div className='flex gap-2 self-end'>
+      <div className='flex gap-2 w-full mt-4 justify-between md:justify-around'>
         <Button
           color='default'
           disabled={isPending}
