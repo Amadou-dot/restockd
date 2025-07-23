@@ -15,16 +15,13 @@ export default function CartItemCard({
   const product = item.product;
   const totalPrice = product.price * item.quantity;
   const { mutate: updateQuantity } = useUpdateQuantity();
+  const itemId = item.product._id;
   const incrementQuantity = () => {
-    if (canModify) {
-      updateQuantity({ itemId: item.product._id, action: 'increment' });
-    }
+    canModify && updateQuantity({ itemId, action: 'increment' });
   };
 
   const decrementQuantity = () => {
-    if (canModify) {
-      updateQuantity({ itemId: item.product._id, action: 'decrement' });
-    }
+    canModify && updateQuantity({ itemId, action: 'decrement' });
   };
 
   return (
@@ -82,8 +79,7 @@ export default function CartItemCard({
                         onPress={decrementQuantity}
                         color='primary'
                         size='sm'
-                        isIconOnly
-                        disabled={item.quantity <= 1}>
+                        isIconOnly>
                         <FaMinus size={10} />
                       </Button>
                       <span className='min-w-[2rem] text-center font-semibold'>
@@ -153,8 +149,7 @@ export default function CartItemCard({
                         onPress={decrementQuantity}
                         color='primary'
                         size='sm'
-                        isIconOnly
-                        disabled={item.quantity <= 1}>
+                        isIconOnly>
                         <FaMinus size={10} />
                       </Button>
                       <span className='min-w-[2rem] text-center font-semibold'>
