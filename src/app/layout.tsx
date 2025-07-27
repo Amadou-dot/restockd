@@ -1,3 +1,4 @@
+import AuthProvider from '@/components/AuthProvider';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NavigationBar from '@/components/NavigationBar';
 import QueryProvider from '@/components/QueryProvider';
@@ -34,11 +35,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ErrorBoundary>
-          <QueryProvider>
-            <ToastProvider placement='bottom-center' />
-            <NavigationBar />
-            <main className='p-8 min-h-screen'>{children}</main>
-          </QueryProvider>
+          <AuthProvider>
+            <QueryProvider>
+              <ToastProvider placement='bottom-center' />
+              <NavigationBar />
+              <main className='p-8 min-h-screen'>{children}</main>
+            </QueryProvider>
+          </AuthProvider>
         </ErrorBoundary>
       </body>
     </html>

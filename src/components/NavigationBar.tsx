@@ -9,8 +9,9 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@heroui/navbar';
+import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
-import { redirect, RedirectType, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 export const AcmeLogo = () => {
   return (
@@ -28,16 +29,11 @@ export const AcmeLogo = () => {
 export default function NavigationBar() {
   const path = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: authData, isLoading } = {
-    isLoading: false,
-    data: { isLoggedIn: true },
-  }; //!
-  const { mutate: logout, isPending: isLoggingOut } = {
-    isPending: false,
-    mutate: () => {},
-  }; //!
+  const { data: session, status } = useSession();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const isLoggedIn = authData?.isLoggedIn || false;
+  const isLoading = status === 'loading';
+  const isLoggedIn = status === 'authenticated' && !!session;
 
   // Base menu items always shown
   const baseMenuItems = [
@@ -57,9 +53,12 @@ export default function NavigationBar() {
   const menuItems = isLoggedIn
     ? [...baseMenuItems, ...protectedMenuItems]
     : baseMenuItems;
-  const handleLogout = () => {
-    logout();
-    redirect('/', RedirectType.replace);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    setIsMenuOpen(false); // Close menu before logout
+    await signOut({ callbackUrl: '/' });
+    setIsLoggingOut(false);
   };
 
   return (
@@ -95,7 +94,11 @@ export default function NavigationBar() {
       <NavbarContent className='hidden sm:flex gap-4' justify='center'>
         {menuItems.map(({ title, to }) => (
           <NavbarItem key={to} isActive={path === to}>
-            <Link className='w-full' href={to} color='foreground'>
+            <Link
+              className='w-full'
+              href={to}
+              color='foreground'
+              onClick={() => setIsMenuOpen(false)}>
               {title}
             </Link>
           </NavbarItem>
@@ -123,7 +126,8 @@ export default function NavigationBar() {
                 as={Link}
                 className='w-full'
                 color='primary'
-                href='/login'>
+                href='/login'
+                onPress={() => setIsMenuOpen(false)}>
                 Login
               </Button>
             </NavbarItem>
@@ -133,7 +137,8 @@ export default function NavigationBar() {
                 className='w-full'
                 color='primary'
                 href='/signup'
-                variant='ghost'>
+                variant='ghost'
+                onPress={() => setIsMenuOpen(false)}>
                 Signup
               </Button>
             </NavbarItem>
