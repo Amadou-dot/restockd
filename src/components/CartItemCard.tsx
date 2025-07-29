@@ -16,13 +16,11 @@ export default function CartItemCard({
   const totalPrice = product.price * item.quantity;
   const { mutate: updateQuantity } = useUpdateQuantity();
   const itemId = item.product._id;
-  const incrementQuantity = () => {
+  const incrementQuantity = () =>
     canModify && updateQuantity({ itemId, action: 'increment' });
-  };
 
-  const decrementQuantity = () => {
+  const decrementQuantity = () =>
     canModify && updateQuantity({ itemId, action: 'decrement' });
-  };
 
   return (
     <Card

@@ -1,3 +1,4 @@
+import { IUserDocument } from '@/types/User';
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import { MongoClient } from 'mongodb';
 import NextAuth from 'next-auth';
@@ -17,9 +18,8 @@ const handler = NextAuth({
 
   callbacks: {
     async session({ session, user }) {
-      // Add custom session properties here
       if (user && session.user) {
-        (session.user as any).id = user.id;
+        (session.user as IUserDocument).id = user.id;
       }
       return session;
     },
