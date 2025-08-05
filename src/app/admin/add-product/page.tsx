@@ -5,6 +5,7 @@ import { Button } from '@heroui/button';
 import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { NumberInput } from '@heroui/number-input';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 export default function AddProductPage() {
@@ -13,6 +14,8 @@ export default function AddProductPage() {
   const [productPrice, setProductPrice] = useState(0);
   const [productDesc, setProductDesc] = useState('');
   const [image, setImage] = useState<File | null>(null);
+  const session = useSession();
+  const userId = session?.data?.user?.id;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -27,10 +30,8 @@ export default function AddProductPage() {
     formData.append('name', productName);
     formData.append('price', productPrice.toString());
     formData.append('description', productDesc);
-
-    if (image) {
-      formData.append('image', image);
-    }
+    if (userId) formData.append('userId', userId);
+    if (image) formData.append('image', image);
 
     createProduct(formData, { onSuccess: () => resetForm() });
   };

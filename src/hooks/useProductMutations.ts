@@ -15,7 +15,9 @@ export const useCreateProduct = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create product');
+        // get the error message from the response
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to create product');
       }
 
       return response.json();

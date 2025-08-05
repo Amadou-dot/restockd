@@ -5,25 +5,29 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
-    console.log('Form data received:', formData);
-    const name = formData.get('name') as string;
-    const price = parseFloat(formData.get('price') as string);
-    const description = formData.get('description') as string;
-    const image = formData.get('image') as File;
-    const userId = formData.get('userId') as string;
+    const name = formData.get('name');
+    const priceRaw = formData.get('price');
+    const description = formData.get('description');
+    const image = formData.get('image');
+    const userId = formData.get('userId');
 
-    if (!name || !price || !description || !image || !userId) {
-      return NextResponse.json(
-        {
-          message: 'All fields are required',
-          error: 'All fields are required',
-        },
-        { status: 400 }
-      );
+    if (!name || typeof name !== 'string' || name.trim() === '') {
+      return NextResponse.json({ error: 'Product name is required' }, { status: 400 });
+    }
+    if (!priceRaw || typeof priceRaw !== 'string' || isNaN(parseFloat(priceRaw))) {
+      return NextResponse.json({ error: 'Product price is required and must be a number' }, { status: 400 });
+    }
+    const price = parseFloat(priceRaw);
+    if (!description || typeof description !== 'string' || description.trim() === '') {
+      return NextResponse.json({ error: 'Product description is required' }, { status: 400 });
+    }
+    if (!image || !(image instanceof File)) {
+      return NextResponse.json({ error: 'Product image is required and must be a file' }, { status: 400 });
+    }
+    if (!userId || typeof userId !== 'string' || userId.trim() === '') {
+      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
-    // TODO: Handle file upload to S3 or your storage service
-    // For now, we'll just use the filename
     const imageUrl = await uploadImageToS3Bucket(image);
 
     const newProduct = new Product({
