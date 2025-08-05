@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
-    const user = await getUser(request);
+    const user = await getUser();
 
     if (!user) {
       return NextResponse.json(

@@ -6,9 +6,7 @@ export default function RemoveCartItemBtn({
 }: {
   productId: string;
 }) {
-  const handleRemoveFromCart = () => {
-    console.log(`Removing product ${productId} from cart`);
-  };
+  const handleRemoveFromCart = () => {};
   return (
     <Button
       color='danger'

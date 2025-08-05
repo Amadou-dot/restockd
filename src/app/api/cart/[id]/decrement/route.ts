@@ -1,12 +1,9 @@
 import { initializeDatabase } from '@/lib/mongoose';
 import { PopulatedCartItem } from '@/types/Cart';
 import { getUser } from '@/utils/getUser';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest as NxtReq, NextResponse } from 'next/server';
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(req: NxtReq, { params }: { params: Promise<{ id: string }> }) {
   try {
     await initializeDatabase();
     const { id } = await params;
@@ -21,7 +18,7 @@ export async function POST(
       );
     }
 
-    const user = await getUser(request);
+    const user = await getUser();
     if (!user) {
       return NextResponse.json(
         {
@@ -32,7 +29,7 @@ export async function POST(
       );
     }
 
-    const cart = await user.getPopulatedCart();
+    const cart = await user.getCart();
     const item = cart.items.find(
       (item: PopulatedCartItem) => item.product._id.toString() === id
     );

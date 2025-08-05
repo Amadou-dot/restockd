@@ -61,3 +61,5 @@ export interface OrdersResponse {
     hasPrevPage: boolean;
   };
 }
+
+export interface IOrderDocument extends Order, Document {}

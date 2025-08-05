@@ -1,23 +1,23 @@
+import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { User } from '@/models/user';
 import { IUserDocument } from '@/types/User';
-import { NextRequest } from 'next/server';
+import { getServerSession } from 'next-auth';
 
-export const getUser = async (
-  req: NextRequest
-): Promise<IUserDocument | null> => {
-  const userId = req.headers.get('user-id') || '6865e7611f740a3fd8c1ecb6';
+export const getUser = async (): Promise<IUserDocument | null> => {
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
   if (!userId) {
-    console.error('User ID not found in request headers');
+    console.error('User ID not found in session');
     return null;
   }
 
   try {
-    const user = await User.findById(userId);
+    const user = (await User.findById(userId)) as IUserDocument;
     if (!user) {
       console.error(`User with ID ${userId} not found`);
       return null;
     }
-    return user as IUserDocument;
+    return user;
   } catch (error) {
     console.error('Error fetching user:', error);
     return null;

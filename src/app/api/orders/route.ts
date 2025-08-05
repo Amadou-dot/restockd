@@ -1,9 +1,9 @@
 import { getUser } from '@/utils/getUser';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const user = await getUser(request);
+    const user = await getUser();
     if (!user) {
       return NextResponse.json(
         { message: 'User not found', error: 'User not found' },

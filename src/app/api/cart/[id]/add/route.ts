@@ -1,12 +1,9 @@
 import { Product } from '@/models/product';
 import { getUser } from '@/utils/getUser';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // api/cart/[id]/add
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST({ params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
 
@@ -20,7 +17,7 @@ export async function POST(
       );
     }
 
-    const user = await getUser(req);
+    const user = await getUser();
     if (!user) {
       return NextResponse.json(
         {
@@ -43,14 +40,24 @@ export async function POST(
     }
 
     await user.addToCart(product);
-    const cart = await user.getPopulatedCart();
-    
-    return NextResponse.json({
-      success: true,
-      message: 'Item added to cart successfully',
-      data: cart
-    }, { status: 200 });
-    
+    const cart = await user.getCart();
+    if (!cart) {
+      return NextResponse.json(
+        {
+          message: 'Cart not found',
+          error: 'Cart not found',
+        },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(
+      {
+        success: true,
+        message: 'Item added to cart successfully',
+        data: cart,
+      },
+      { status: 200 }
+    );
   } catch (error) {
     console.error('Error adding item to cart:', error);
     return NextResponse.json(

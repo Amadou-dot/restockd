@@ -1,5 +1,5 @@
 import { Document } from 'mongoose';
-import { Cart, PopulatedCart } from './Cart';
+import { PopulatedCart } from './Cart';
 import { Order } from './Order';
 import { Product } from './Product';
 
@@ -12,7 +12,6 @@ export interface User {
   resetTokenExpiration?: Date;
   createdAt: Date;
   updatedAt: Date;
-  cart: Cart;
 }
 
 export interface UserRegistrationData {
@@ -53,19 +52,13 @@ export interface IUserDocument extends User, Document {
    * @return {Promise<void>} A promise that resolves when the cart is cleared.
    */
   clearCart(): Promise<void>;
-  /**
-   * Retrieves the user's cart.
-   * @return {Promise<Cart>} A promise that resolves to the user's cart. Only includes item IDs and quantities.
-   * Use `getPopulatedCart` for detailed product information.
-   * @throws {Error} If there are issues retrieving the cart.
-   */
-  getCart(): Promise<Cart>;
+
   /**
    * Retrieves the user's cart with populated product details.
    * @return {Promise<PopulatedCart>} A promise that resolves to the populated cart.
    * @throws {Error} If there are issues retrieving the populated cart.
    */
-  getPopulatedCart(): Promise<PopulatedCart>;
+  getCart(): Promise<PopulatedCart>;
   /**
    * Places an order based on the current user's cart.
    * @return {Promise<void>} A promise that resolves when the order is placed.

@@ -1,9 +1,7 @@
-import mongoose, { type Document } from 'mongoose';
-import {type Order as OrderType } from '../types/Order';
+import mongoose from 'mongoose';
+import { IOrderDocument } from '../types/Order';
 
 const Schema = mongoose.Schema;
-
-export interface IOrderDocument extends OrderType, Document {}
 
 const orderSchema = new Schema<IOrderDocument>({
   userId: {
@@ -60,4 +58,5 @@ const orderSchema = new Schema<IOrderDocument>({
   },
 });
 
-export const Order = mongoose.models.Order || mongoose.model<IOrderDocument>('Order', orderSchema);
+export const Order =
+  mongoose.models.Order || mongoose.model<IOrderDocument>('Order', orderSchema);

@@ -1,13 +1,16 @@
 import { MongoDBAdapter } from '@auth/mongodb-adapter';
 import { MongoClient } from 'mongodb';
-import NextAuth from 'next-auth';
+import NextAuth, { type AuthOptions } from 'next-auth';
 import GithubProvider from 'next-auth/providers/github';
 import GoogleProvider from 'next-auth/providers/google';
 const client = new MongoClient(process.env.MONGODB_URI!);
 const clientPromise = client.connect();
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
   adapter: MongoDBAdapter(clientPromise),
+  pages: {
+    signIn: '/login',
+  },
   providers: [
     GithubProvider({
       clientId: process.env.AUTH_GITHUB_ID!,
@@ -18,7 +21,6 @@ const handler = NextAuth({
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
     }),
   ],
-
   callbacks: {
     async session({ session, user }) {
       if (user && session.user) {
@@ -27,9 +29,9 @@ const handler = NextAuth({
       return session;
     },
   },
-  pages: {
-    signIn: '/login',
-  },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
+

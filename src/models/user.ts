@@ -1,11 +1,10 @@
-import { Order } from '@/models/order';
 import { Product } from '@/models/product';
-import type { CartItem, PopulatedCart } from '@/types/Cart';
-import type { OrderItem, Order as OrderType } from '@/types/Order';
+import type { ICartDocument as ICart, PopulatedCart } from '@/types/Cart';
 import type { Product as IProduct } from '@/types/Product';
 import type { IUserDocument } from '@/types/User';
 import { PRODUCTS_PER_PAGE } from '@/utils/constants';
 import mongoose from 'mongoose';
+import { Cart } from './cart';
 
 const Schema = mongoose.Schema;
 
@@ -63,96 +62,14 @@ const userSchema = new Schema<IUserDocument>({
     type: Date,
     select: false, // Do not return resetTokenExpiration in queries by default
   },
-  // Cart structure
-  cart: {
-    items: [
-      {
-        productId: {
-          type: Schema.Types.ObjectId,
-          required: true,
-        },
-        quantity: {
-          type: Number,
-          required: true,
-          min: 1,
-        },
-        dateAdded: {
-          type: Date,
-          default: Date.now,
-        },
-      },
-    ],
-    totalQuantity: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    totalPrice: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-    lastUpdated: {
-      type: Date,
-      default: Date.now,
-    },
-  },
 });
 
-userSchema.methods.getCart = async function (this: IUserDocument) {
-  return this.cart;
-};
-
-userSchema.methods.getPopulatedCart = async function (
+userSchema.methods.getCart = async function (
   this: IUserDocument
-): Promise<PopulatedCart> {
-  const populatedItems = [];
-
-  for (const item of this.cart.items) {
-    const product = await Product.findById(item.productId);
-    if (product) {
-      populatedItems.push({
-        productId: item.productId,
-        product: product.toObject(),
-        quantity: item.quantity,
-        dateAdded: item.dateAdded,
-      });
-    }
-    // If product is not found, we skip it (it may have been deleted)
-  }
-
-  // Recalculate totals based on existing products
-  const totalQuantity = populatedItems.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
-  const totalPrice = populatedItems.reduce(
-    (sum, item) => sum + item.product.price * item.quantity,
-    0
-  );
-
-  // Update the cart if totals have changed (due to missing products)
-  if (
-    this.cart.totalQuantity !== totalQuantity ||
-    this.cart.totalPrice !== totalPrice
-  ) {
-    this.cart.items = populatedItems.map(item => ({
-      productId: item.productId,
-      quantity: item.quantity,
-      dateAdded: item.dateAdded,
-    }));
-    this.cart.totalQuantity = totalQuantity;
-    this.cart.totalPrice = totalPrice;
-    this.cart.lastUpdated = new Date();
-    await this.save();
-  }
-
-  return {
-    items: populatedItems,
-    totalQuantity,
-    totalPrice,
-    lastUpdated: this.cart.lastUpdated,
-  };
+): Promise<PopulatedCart | null> {
+  const cart = (await Cart.findOne({ userId: this._id })) as ICart;
+  if (!cart) return null;
+  return await cart.getCart();
 };
 
 userSchema.methods.addToCart = async function (
@@ -160,111 +77,90 @@ userSchema.methods.addToCart = async function (
   product: IProduct,
   quantity = 1
 ) {
-  if (quantity <= 0) {
-    throw new Error('Quantity must be greater than 0');
-  }
+  let cart = await Cart.findOne({ userId: this._id });
 
-  const itemIndex = this.cart.items.findIndex(
-    (item: CartItem) => item.productId.toString() === product._id.toString()
-  );
-
-  if (itemIndex > -1) {
-    // Item already exists in the cart, update quantity
-    this.cart.items[itemIndex].quantity += quantity;
-  } else {
-    // Item does not exist, add new item
-    this.cart.items.push({
-      productId: new mongoose.Types.ObjectId(product._id).toString(),
-      quantity,
-      dateAdded: new Date(),
+  // If the cart doesn't exist, create it
+  if (!cart) {
+    cart = await Cart.create({
+      userId: this._id,
+      items: [],
+      totalQuantity: 0,
+      totalPrice: 0,
+      lastUpdated: new Date(),
     });
   }
 
-  this.cart.totalQuantity += quantity;
-  this.cart.totalPrice += product.price * quantity;
-  this.cart.lastUpdated = new Date();
-
-  await this.save();
+  // Delegate to the cart's addToCart method
+  await cart.addToCart(product, quantity);
 };
 
 userSchema.methods.deleteItemFromCart = async function (
   this: IUserDocument,
   productId: string
 ) {
-  const itemIndex = this.cart.items.findIndex(
-    (item: CartItem) => item.productId.toString() === productId.toString()
-  );
+  const cart = await Cart.findOne({ userId: this._id });
 
-  if (itemIndex === -1) throw new Error('Item not found in cart'); // Item not found in cart
+  if (!cart) {
+    throw new Error('Cart not found');
+  }
 
-  const productPrice = await Product.findById(productId).select('price');
-
-  // if quantity is greater than 1, just reduce the quantity
-  if (this.cart.items[itemIndex].quantity > 1)
-    this.cart.items[itemIndex].quantity -= 1;
-  // if quantity is 1, remove the item from the cart
-  else this.cart.items.splice(itemIndex, 1);
-
-  this.cart.totalQuantity -= 1;
-  this.cart.totalPrice -= productPrice ? productPrice.price : 0;
-  this.cart.lastUpdated = new Date();
-
-  await this.save();
+  await cart.deleteItemFromCart(productId);
 };
 
 userSchema.methods.clearCart = async function (this: IUserDocument) {
-  this.cart.items = [];
-  this.cart.totalQuantity = 0;
-  this.cart.totalPrice = 0;
-  this.cart.lastUpdated = new Date();
+  const cart = await Cart.findOne({ userId: this._id });
 
-  await this.save();
+  if (!cart) {
+    throw new Error('Cart not found');
+  }
+
+  await cart.clearCart();
 };
 
-userSchema.methods.placeOrder = async function (this: IUserDocument) {
-  if (!this.cart || this.cart.items.length === 0)
-    throw new Error(`Cart is empty`);
+// userSchema.methods.placeOrder = async function (this: IUserDocument) {
+//   if (!this.cart || this.cart.items.length === 0)
+//     throw new Error(`Cart is empty`);
 
-  // Validate cart totals
-  if (this.cart.totalQuantity <= 0 || this.cart.totalPrice <= 0)
-    throw new Error(`Cart totals are invalid`);
+//   // Validate cart totals
+//   if (this.cart.totalQuantity <= 0 || this.cart.totalPrice <= 0)
+//     throw new Error(`Cart totals are invalid`);
 
-  // Get populated cart items
-  const cartItems = await this.getPopulatedCart();
-  const orderItems: OrderItem[] = cartItems.items.map(
-    (item: PopulatedCart['items'][number]) => ({
-      productName: item.product.name,
-      productPrice: item.product.price,
-      image_url: String(item.product.image), // Image is an S3 URL string
-      productId: item.productId,
-      quantity: item.quantity,
-      dateAdded: item.dateAdded,
-    })
-  );
+//   // Get populated cart items
+//   const cartItems = await this.getCart();
+//   const orderItems: OrderItem[] = cartItems.items.map(
+//     (item: PopulatedCart['items'][number]) => ({
+//       productName: item.product.name,
+//       productPrice: item.product.price,
+//       image_url: String(item.product.image), // Image is an S3 URL string
+//       productId: item.productId,
+//       quantity: item.quantity,
+//       dateAdded: item.dateAdded,
+//     })
+//   );
 
-  // Create a new order document
-  const order = new Order({
-    userId: this._id,
-    items: orderItems,
-    status: 'pending',
-    createdAt: new Date(),
-    totalPrice: this.cart.totalPrice,
-  });
+//   // Create a new order document
+//   const order = new Order({
+//     userId: this._id,
+//     items: orderItems,
+//     status: 'pending',
+//     createdAt: new Date(),
+//     totalPrice: this.cart.totalPrice,
+//   });
 
-  // Save the order
-  await order.save();
+//   // Save the order
+//   await order.save();
 
-  // Clear the cart after placing order
-  await this.clearCart();
+//   // Clear the cart after placing order
+//   await this.clearCart();
 
-  await this.save();
-};
+//   await this.save();
+// };
 
-userSchema.methods.getOrders = async function (this: IUserDocument) {
-  // Get orders from the Order collection for this user
-  const orders: OrderType[] = await Order.find({ userId: this._id }).exec();
-  return orders;
-};
+// userSchema.methods.getOrders = async function (this: IUserDocument) {
+//   // Get orders from the Order collection for this user
+//   const orders: OrderType[] = await Order.find({ userId: this._id }).exec();
+//   return orders;
+// };
 
 userSchema.methods.getCreatedProducts = async function (
   this: IUserDocument,

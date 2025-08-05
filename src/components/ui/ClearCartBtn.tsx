@@ -6,13 +6,17 @@ import {
   ModalHeader,
   useDisclosure,
 } from '@heroui/modal';
-import { redirect, RedirectType } from 'next/navigation';
 import { FaTrash } from 'react-icons/fa6';
 export default function ClearCartBtn() {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange: toggleOpenState } = useDisclosure();
   const onClearCart = async () => {
-    // Call the clear cart API
-    redirect('/', RedirectType.replace);
+    // const user = await getUser();
+    // if (!user) {
+    //   console.error('User not found');
+    //   return;
+    // }
+    // user.clearCart();
+    toggleOpenState();
   };
   return (
     <>
@@ -25,7 +29,7 @@ export default function ClearCartBtn() {
         onPress={onOpen}>
         Clear cart
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Modal isOpen={isOpen} onOpenChange={toggleOpenState}>
         <ModalContent>
           <ModalHeader>
             <h2 className='text-lg font-semibold'>Clear Cart</h2>
@@ -38,7 +42,7 @@ export default function ClearCartBtn() {
                 color='secondary'
                 // isDisabled={isPending}
                 variant='light'
-                onPress={onOpenChange}>
+                onPress={toggleOpenState}>
                 Cancel
               </Button>
               <Button
