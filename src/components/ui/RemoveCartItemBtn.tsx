@@ -1,11 +1,7 @@
 import { Button } from '@heroui/button';
 import { FaTrash } from 'react-icons/fa6';
 
-export default function RemoveCartItemBtn({
-  productId,
-}: {
-  productId: string;
-}) {
+export default function RemoveCartItemBtn({}: { productId: string }) {
   const handleRemoveFromCart = () => {};
   return (
     <Button

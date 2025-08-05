@@ -19,7 +19,7 @@ export default function OrderCard({ order }: { order: OrderDocument }) {
       <p>Items:</p>
       <ul>
         {order.items.map(item => (
-          <li key={item.productId.toString()} className='ml-4'>
+          <li key={item.product.toString()} className='ml-4'>
             {item.quantity} x {item.productName} ($
             {item.productPrice.toFixed(2)})
           </li>

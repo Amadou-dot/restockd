@@ -1,7 +1,7 @@
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
 import { User } from '@/models/user';
 import { IUserDocument } from '@/types/User';
 import { getServerSession } from 'next-auth';
+import { authOptions } from './authOptions';
 
 export const getUser = async (): Promise<IUserDocument | null> => {
   const session = await getServerSession(authOptions);

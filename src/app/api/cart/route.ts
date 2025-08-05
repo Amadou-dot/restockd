@@ -3,8 +3,8 @@ import { User } from '@/models/user';
 import { PopulatedCart } from '@/types/Cart';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { authOptions } from '../auth/[...nextauth]/route';
 import { IUserDocument } from '@/types/User';
+import { authOptions } from '@/utils/authOptions';
 
 export async function GET() {
   try {
