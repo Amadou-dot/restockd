@@ -9,11 +9,13 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@heroui/navbar';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-export const AcmeLogo = () => {
+import UserAvatar from './UserAvatar';
+
+export const CompanyLogo = () => {
   return (
     <svg fill='none' height='36' viewBox='0 0 32 32' width='36'>
       <path
@@ -30,7 +32,6 @@ export default function NavigationBar() {
   const path = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { data: session, status } = useSession();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const isLoading = status === 'loading';
   const isLoggedIn = status === 'authenticated' && !!session;
@@ -53,13 +54,6 @@ export default function NavigationBar() {
   const menuItems = isLoggedIn
     ? [...baseMenuItems, ...protectedMenuItems]
     : baseMenuItems;
-
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    setIsMenuOpen(false); // Close menu before logout
-    await signOut({ callbackUrl: '/' });
-    setIsLoggingOut(false);
-  };
 
   return (
     <Navbar
@@ -87,7 +81,7 @@ export default function NavigationBar() {
           className='sm:hidden'
         />
         <NavbarBrand>
-          <AcmeLogo />
+          <CompanyLogo />
           <p className='font-bold text-inherit select-none'>Restock&apos;d</p>
         </NavbarBrand>
       </NavbarContent>
@@ -110,41 +104,22 @@ export default function NavigationBar() {
             <span className='text-sm text-gray-500'>Loading...</span>
           </NavbarItem>
         ) : isLoggedIn ? (
-          <NavbarItem>
+          <UserAvatar />
+        ) : (
+          <NavbarItem key={'login'}>
             <Button
-              color='danger'
-              isLoading={isLoggingOut}
-              variant='light'
-              onPress={handleLogout}>
-              {isLoggingOut ? 'Logging out...' : 'Logout'}
+              as={Link}
+              className='w-full'
+              color='primary'
+              href='/login'
+              variant='ghost'
+              onPress={() => setIsMenuOpen(false)}>
+              Sign In
             </Button>
           </NavbarItem>
-        ) : (
-          <>
-            <NavbarItem key={'login'}>
-              <Button
-                as={Link}
-                className='w-full'
-                color='primary'
-                href='/login'
-                onPress={() => setIsMenuOpen(false)}>
-                Login
-              </Button>
-            </NavbarItem>
-            <NavbarItem key={'signup'}>
-              <Button
-                as={Link}
-                className='w-full'
-                color='primary'
-                href='/signup'
-                variant='ghost'
-                onPress={() => setIsMenuOpen(false)}>
-                Signup
-              </Button>
-            </NavbarItem>
-          </>
         )}
       </NavbarContent>
+
       {/* Mobile menu */}
       <NavbarMenu>
         {menuItems.map(({ title, to }, index) => (
@@ -164,20 +139,6 @@ export default function NavigationBar() {
             </Link>
           </NavbarMenuItem>
         ))}
-        {/* Add logout button in mobile menu */}
-        {isLoggedIn && (
-          <NavbarMenuItem>
-            <Button
-              className='w-full justify-start'
-              color='danger'
-              isLoading={isLoggingOut}
-              variant='light'
-              radius='sm'
-              onPress={handleLogout}>
-              {isLoggingOut ? 'Logging out...' : 'Logout'}
-            </Button>
-          </NavbarMenuItem>
-        )}
       </NavbarMenu>
     </Navbar>
   );
