@@ -32,7 +32,7 @@ export const usePlaceOrder = () => {
 export const useCompleteOrder = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<{ orderId: string; totalPrice: number; itemCount: number }, Error, string>({
+  return useMutation<{ orderId: string; totalPrice: number; itemCount: number; invoiceUrl?: string }, Error, string>({
     mutationFn: async (sessionId: string) => {
       const response = await completeOrder(sessionId);
       return response;

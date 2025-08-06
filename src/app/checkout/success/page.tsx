@@ -113,6 +113,18 @@ export default function CheckoutSuccessPage() {
                     <p>Order ID: {orderDetails.orderId}</p>
                     <p>Items: {orderDetails.itemCount}</p>
                     <p>Total: ${orderDetails.totalPrice.toFixed(2)}</p>
+                    {orderDetails.invoiceUrl && (
+                      <p>
+                        <a 
+                          href={orderDetails.invoiceUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className='text-blue-400 hover:text-blue-300 underline'
+                        >
+                          Download Invoice (PDF)
+                        </a>
+                      </p>
+                    )}
                   </div>
                 )}
                 <p className='text-sm text-gray-400'>

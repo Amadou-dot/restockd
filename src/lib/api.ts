@@ -82,7 +82,7 @@ export const placeOrder = async (): Promise<{ url?: string; id?: string }> => {
 }
 
 // Complete an order after successful payment
-export const completeOrder = async (sessionId: string): Promise<{ orderId: string; totalPrice: number; itemCount: number }> => {
+export const completeOrder = async (sessionId: string): Promise<{ orderId: string; totalPrice: number; itemCount: number; invoiceUrl?: string }> => {
   const response = await fetch(`${API_BASE_URL}/orders/complete`, {
     method: 'POST',
     headers: {

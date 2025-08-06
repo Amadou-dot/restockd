@@ -1,12 +1,12 @@
 import { Product } from '@/models/product';
 import type { ICartDocument as ICart, PopulatedCart } from '@/types/Cart';
+import type { Order as IOrder } from '@/types/Order';
 import type { Product as IProduct } from '@/types/Product';
 import type { IUserDocument } from '@/types/User';
 import { PRODUCTS_PER_PAGE } from '@/utils/constants';
 import mongoose from 'mongoose';
 import { Cart } from './cart';
 import { Order } from './order';
-import type { Order as IOrder } from '@/types/Order';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema<IUserDocument>({
@@ -117,45 +117,6 @@ userSchema.methods.clearCart = async function (this: IUserDocument) {
 
   await cart.clearCart();
 };
-
-// userSchema.methods.placeOrder = async function (this: IUserDocument) {
-//   if (!this.cart || this.cart.items.length === 0)
-//     throw new Error(`Cart is empty`);
-
-//   // Validate cart totals
-//   if (this.cart.totalQuantity <= 0 || this.cart.totalPrice <= 0)
-//     throw new Error(`Cart totals are invalid`);
-
-//   // Get populated cart items
-//   const cartItems = await this.getCart();
-//   const orderItems: OrderItem[] = cartItems.items.map(
-//     (item: PopulatedCart['items'][number]) => ({
-//       productName: item.product.name,
-//       productPrice: item.product.price,
-//       image_url: String(item.product.image), // Image is an S3 URL string
-//       productId: item.productId,
-//       quantity: item.quantity,
-//       dateAdded: item.dateAdded,
-//     })
-//   );
-
-//   // Create a new order document
-//   const order = new Order({
-//     userId: this._id,
-//     items: orderItems,
-//     status: 'pending',
-//     createdAt: new Date(),
-//     totalPrice: this.cart.totalPrice,
-//   });
-
-//   // Save the order
-//   await order.save();
-
-//   // Clear the cart after placing order
-//   await this.clearCart();
-
-//   await this.save();
-// };
 
 userSchema.methods.getOrders = async function (this: IUserDocument) {
   // Get orders from the Order collection for this user

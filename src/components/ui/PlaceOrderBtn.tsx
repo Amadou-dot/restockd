@@ -4,40 +4,31 @@ import { usePlaceOrder } from '../../hooks/useOrders';
 
 export default function PlaceOrderBtn() {
   const { mutate: placeOrder, isPending, isError } = usePlaceOrder();
-  
+
   const handlePlaceOrder = async () => {
     placeOrder(undefined, {
       onSuccess: (data: { url?: string; id?: string }) => {
         // Check if we have a valid URL
-        if (data?.url) {
-          // Show success message
-          addToast({
-            title: 'Order Created Successfully!',
-            description: 'Redirecting to secure payment...',
-            color: 'success',
-          });
-          
-          // Small delay to show the success message
-          setTimeout(() => {
-            window.location.href = data.url!;
-          }, 500);
-        } else {
+        if (data?.url) window.location.href = data.url!;
+        else {
           // No URL returned - show error
           addToast({
             title: 'Configuration Error',
-            description: 'Payment system is not properly configured. Please contact support.',
+            description:
+              'Payment system is not properly configured. Please contact support.',
             color: 'warning',
           });
         }
       },
-      onError: (error) => {
+      onError: error => {
         console.error('Error placing order:', error);
         addToast({
           title: 'Order Failed',
-          description: 'There was an error creating your order. Please try again.',
+          description:
+            'There was an error creating your order. Please try again.',
           color: 'danger',
         });
-      }
+      },
     });
   };
 
