@@ -42,7 +42,7 @@ export default function Cart() {
       {!isLoading && error && (
         <Alert description={error.message} title='Error' />
       )}
-      {!isLoading && !cart && (
+      {!isLoading && (!cart || cart.items.length === 0) && (
         <Alert
           color='primary'
           title='Such empty!'
@@ -50,7 +50,7 @@ export default function Cart() {
         />
       )}
 
-      {!isLoading && cart && cart.items && (
+      {!isLoading && cart && cart.items.length > 0 && (
         <div className='max-w-5xl mx-auto p-6'>
           {
             <div>
