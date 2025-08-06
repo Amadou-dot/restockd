@@ -4,23 +4,24 @@ import { getUser } from '@/utils/getUser';
 import { NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     // Check environment variables
     if (!process.env.STRIPE_SECRET_KEY || !process.env.CLIENT_URL) {
       console.error('Missing environment variables:', {
         STRIPE_SECRET_KEY: !!process.env.STRIPE_SECRET_KEY,
-        CLIENT_URL: !!process.env.CLIENT_URL
+        CLIENT_URL: !!process.env.CLIENT_URL,
       });
       return NextResponse.json(
-        { 
+        {
           message: 'Payment system configuration error',
-          error: 'STRIPE_SECRET_KEY and CLIENT_URL environment variables are required'
+          error:
+            'STRIPE_SECRET_KEY and CLIENT_URL environment variables are required',
         },
         { status: 500 }
       );
     }
-    
+
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
     const user = await getUser();
