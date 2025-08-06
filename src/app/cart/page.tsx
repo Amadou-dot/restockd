@@ -35,14 +35,19 @@ export default function Cart() {
       <title>Cart</title>
       <meta content='Manage your shopping cart' name='description' />
       {isLoading && !error && <Spinner title='Loading cart...' />}
-      {error && <Alert description={error.message} title='Error' />}
+      {!isLoading && error && (
+        <Alert description={error.message} title='Error' />
+      )}
+      {!isLoading && !cart && (
+        <Alert
+          color='primary'
+          title='Such empty!'
+          description='Add items to your cart to get started.'
+        />
+      )}
       {!isLoading && cart && cart.items && (
         <div className='max-w-5xl mx-auto p-6'>
-          {cart.items.length === 0 ? (
-            <div className='text-center'>
-              <Alert color='primary' description='Your cart is empty.' />
-            </div>
-          ) : (
+          {
             <div>
               <div className='mb-6 flex items-center justify-between'>
                 <h2 className='text-2xl font-bold '>Shopping Cart</h2>
@@ -61,7 +66,7 @@ export default function Cart() {
                 </div>
               </div>
             </div>
-          )}
+          }
         </div>
       )}
     </>
