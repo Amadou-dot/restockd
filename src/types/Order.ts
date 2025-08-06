@@ -1,10 +1,17 @@
-import { ObjectId } from 'mongoose';
-import type { CartItem } from './Cart';
+import mongoose, { ObjectId } from 'mongoose';
+import { Product } from './Product';
 
-export interface OrderItem extends CartItem {
+export interface OrderItem {
   productName: string;
   productPrice: number;
   image_url: string;
+  quantity: number;
+  dateCreated?: Date; // Optional, defaults to current date
+  product: string; // Product ID as string
+}
+
+export interface PopulatedOrderItem extends Omit<OrderItem, 'product'> {
+  product: Product; // Populated product details
 }
 
 export interface OrderInput {
@@ -50,16 +57,36 @@ export interface OrderResponse {
   message?: string;
 }
 
-export interface OrdersResponse {
-  success: boolean;
-  orders: Order[];
-  pagination: {
-    currentPage: number;
-    totalPages: number;
-    totalOrders: number;
-    hasNextPage: boolean;
-    hasPrevPage: boolean;
-  };
+export interface OrderDetails {
+  userId: ObjectId;
+  items: PopulatedOrderItem[];
+  totalPrice: number;
+  status: string;
+  createdAt: Date;
+  invoiceUrl?: string; // Optional invoice URL
 }
 
-export interface IOrderDocument extends Order, Document {}
+export interface IOrderDocument extends Order, Document {
+  /**
+   * Get a summary of the order.
+   * @returns An object containing the total items, total price, status, and created at date.
+   */
+  getOrderSummary: () => {
+    totalItems: number;
+    totalPrice: number;
+    status: string;
+    createdAt: Date;
+  };
+  /**
+   * Get detailed information about the order.
+   * @returns An object containing userId, items, totalPrice, status, createdAt date, and optional invoice URL.
+   */
+  getOrderDetails: () => {
+    userId: mongoose.Types.ObjectId;
+    items: OrderItem[];
+    totalPrice: number;
+    status: string;
+    createdAt: Date;
+    invoiceUrl?: string;
+  };
+}

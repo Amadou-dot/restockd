@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IOrderDocument } from '../types/Order';
+import { IOrderDocument, OrderDetails, OrderItem } from '../types/Order';
 
 const Schema = mongoose.Schema;
 
@@ -23,7 +23,7 @@ const orderSchema = new Schema<IOrderDocument>({
         type: String,
         required: true,
       },
-      productId: {
+      product: {
         type: Schema.Types.ObjectId,
         required: true,
       },
@@ -57,6 +57,31 @@ const orderSchema = new Schema<IOrderDocument>({
     required: false, // Optional field for invoice URL
   },
 });
+
+orderSchema.index({ userId: 1, createdAt: -1 }); // Index for faster queries by userId and creation date
+
+orderSchema.methods.getOrderSummary = function () {
+  return {
+    totalItems: this.items.reduce(
+      (sum: number, item: OrderItem) => sum + item.quantity,
+      0
+    ),
+    totalPrice: this.totalPrice,
+    status: this.status,
+    createdAt: this.createdAt,
+  };
+};
+
+orderSchema.methods.getOrderDetails = async function (): Promise<OrderDetails> {
+  return {
+    userId: this.userId,
+    items: this.items,
+    totalPrice: this.totalPrice,
+    status: this.status,
+    createdAt: this.createdAt,
+    invoiceUrl: this.invoiceUrl,
+  };
+};
 
 export const Order =
   mongoose.models.Order || mongoose.model<IOrderDocument>('Order', orderSchema);

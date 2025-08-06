@@ -1,4 +1,5 @@
 import { Button } from '@heroui/button';
+import { addToast } from '@heroui/toast';
 import { usePlaceOrder } from '../../hooks/useOrders';
 
 export default function PlaceOrderBtn() {
@@ -6,29 +7,57 @@ export default function PlaceOrderBtn() {
   
   const handlePlaceOrder = async () => {
     placeOrder(undefined, {
-      onSuccess: (data: { url?: string }) => {
-        // Redirect to Stripe checkout URL
+      onSuccess: (data: { url?: string; id?: string }) => {
+        // Check if we have a valid URL
         if (data?.url) {
-          window.location.href = data.url;
+          // Show success message
+          addToast({
+            title: 'Order Created Successfully!',
+            description: 'Redirecting to secure payment...',
+            color: 'success',
+          });
+          
+          // Small delay to show the success message
+          setTimeout(() => {
+            window.location.href = data.url!;
+          }, 500);
+        } else {
+          // No URL returned - show error
+          addToast({
+            title: 'Configuration Error',
+            description: 'Payment system is not properly configured. Please contact support.',
+            color: 'warning',
+          });
         }
       },
       onError: (error) => {
         console.error('Error placing order:', error);
+        addToast({
+          title: 'Order Failed',
+          description: 'There was an error creating your order. Please try again.',
+          color: 'danger',
+        });
       }
     });
   };
 
+  const getButtonText = () => {
+    if (isPending) return 'Creating Order...';
+    if (isError) return 'Try Again';
+    return 'Place Order & Pay';
+  };
+
   return (
     <Button
-      className='flex-1 '
+      className='w-full font-semibold'
       color='primary'
-      disabled={isError}
+      disabled={isPending}
       isLoading={isPending}
       radius='sm'
       size='lg'
       type='submit'
       onPress={handlePlaceOrder}>
-      Place Order
+      {getButtonText()}
     </Button>
   );
 }

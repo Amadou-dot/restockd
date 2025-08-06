@@ -34,7 +34,11 @@ export default function Cart() {
     <>
       <title>Cart</title>
       <meta content='Manage your shopping cart' name='description' />
-      {isLoading && !error && <Spinner title='Loading cart...' />}
+      {isLoading && !error && (
+        <div className='flex items-center justify-center w-screen'>
+          <Spinner className='mt-4' title='Loading cart...' />
+        </div>
+      )}
       {!isLoading && error && (
         <Alert description={error.message} title='Error' />
       )}
@@ -45,6 +49,7 @@ export default function Cart() {
           description='Add items to your cart to get started.'
         />
       )}
+
       {!isLoading && cart && cart.items && (
         <div className='max-w-5xl mx-auto p-6'>
           {

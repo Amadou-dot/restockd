@@ -9,7 +9,6 @@ export interface CartItem {
 }
 
 export interface PopulatedCartItem {
-  // productId: string;
   product: Product;
   quantity: number;
   dateAdded: Date;

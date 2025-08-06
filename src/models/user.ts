@@ -5,7 +5,8 @@ import type { IUserDocument } from '@/types/User';
 import { PRODUCTS_PER_PAGE } from '@/utils/constants';
 import mongoose from 'mongoose';
 import { Cart } from './cart';
-
+import { Order } from './order';
+import type { Order as IOrder } from '@/types/Order';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema<IUserDocument>({
@@ -156,11 +157,11 @@ userSchema.methods.clearCart = async function (this: IUserDocument) {
 //   await this.save();
 // };
 
-// userSchema.methods.getOrders = async function (this: IUserDocument) {
-//   // Get orders from the Order collection for this user
-//   const orders: OrderType[] = await Order.find({ userId: this._id }).exec();
-//   return orders;
-// };
+userSchema.methods.getOrders = async function (this: IUserDocument) {
+  // Get orders from the Order collection for this user
+  const orders: IOrder[] = await Order.find({ userId: this._id });
+  return orders;
+};
 
 userSchema.methods.getCreatedProducts = async function (
   this: IUserDocument,

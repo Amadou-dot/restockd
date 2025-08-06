@@ -59,6 +59,41 @@ export const fetchOrders = async (): Promise<OrderDocument[]> => {
   return handleResponse<OrderDocument[]>(response);
 };
 
+// place an order
+export const placeOrder = async (): Promise<{ url?: string; id?: string }> => {
+  const response = await fetch(`${API_BASE_URL}/orders/placeOrder`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new ApiError(
+      errorData.error || errorData.message || `HTTP error! status: ${response.status}`,
+      response.status,
+      response.statusText
+    );
+  }
+
+  const result = await response.json();
+  return result.data || result; // Handle both wrapped and unwrapped responses
+}
+
+// Complete an order after successful payment
+export const completeOrder = async (sessionId: string): Promise<{ orderId: string; totalPrice: number; itemCount: number }> => {
+  const response = await fetch(`${API_BASE_URL}/orders/complete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ sessionId }),
+  });
+
+  return handleResponse<{ orderId: string; totalPrice: number; itemCount: number }>(response);
+}
+
 // Fetch single product by ID
 export const fetchProduct = async (id: string): Promise<Product> => {
   const response = await fetch(`${API_BASE_URL}/products/${id}`);

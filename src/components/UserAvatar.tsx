@@ -1,5 +1,4 @@
 'use client';
-import { Avatar } from '@heroui/avatar';
 import {
   Dropdown,
   DropdownItem,
@@ -38,6 +37,7 @@ export default function UserAvatar() {
       userImage = user.image;
     }
   }
+  const disabledKeys = ['wishlist', 'seller', 'support', 'addresses', 'payment', 'account'];
 
   return (
     <Dropdown placement='bottom-end'>
@@ -58,7 +58,7 @@ export default function UserAvatar() {
         />
       </DropdownTrigger>
       <DropdownMenu
-        disabledKeys={['wishlist', 'orders', 'seller']}
+        disabledKeys={disabledKeys}
         aria-label='Profile Actions'
         variant='flat'>
         <DropdownItem key='profile' className='h-14 gap-2' textValue='Profile'>
