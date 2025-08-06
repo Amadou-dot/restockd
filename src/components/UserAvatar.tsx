@@ -1,11 +1,12 @@
 'use client';
 import { Avatar } from '@heroui/avatar';
 import {
-    Dropdown,
-    DropdownItem,
-    DropdownMenu,
-    DropdownTrigger,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
 } from '@heroui/dropdown';
+import { User } from '@heroui/user';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -20,7 +21,7 @@ export default function UserAvatar() {
     setImageError(false);
   }, [user?.image]);
 
-  // const userName = user?.name || 'Guest';
+  const userName = user?.name || 'Guest';
   const userEmail = user?.email || 'guest@example.com';
 
   // Use fallback if there's an error or no image
@@ -41,13 +42,18 @@ export default function UserAvatar() {
   return (
     <Dropdown placement='bottom-end'>
       <DropdownTrigger>
-        <Avatar
-          isBordered
+        <User
+          avatarProps={{
+            src: userImage,
+            alt: userName,
+            isBordered: true,
+            size: 'sm',
+            color: 'secondary',
+            showFallback: true,
+          }}
+          name={userName}
           as='button'
           className='transition-transform'
-          color='secondary'
-          size='sm'
-          src={userImage}
           onError={() => setImageError(true)}
         />
       </DropdownTrigger>
@@ -55,8 +61,7 @@ export default function UserAvatar() {
         disabledKeys={['wishlist', 'orders', 'seller']}
         aria-label='Profile Actions'
         variant='flat'>
-
-        <DropdownItem key='profile' className='h-14 gap-2'>
+        <DropdownItem key='profile' className='h-14 gap-2' textValue='Profile'>
           <p className='font-semibold'>Signed in as</p>
           <p className='font-semibold'>{userEmail}</p>
         </DropdownItem>
