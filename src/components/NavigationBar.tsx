@@ -47,7 +47,7 @@ export default function NavigationBar() {
     { title: 'Add Product', to: '/admin/add-product' },
     { title: 'Admin Products', to: '/admin/products' },
     { title: 'Cart', to: '/cart' },
-    { title: 'Orders', to: '/orders' },
+    // { title: 'Orders', to: '/orders' },
   ];
 
   // Combine menu items based on login status
