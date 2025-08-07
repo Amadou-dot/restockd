@@ -1,5 +1,6 @@
 'use client';
 
+import { APP_CONFIG } from '@/config/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { ReactNode } from 'react';
@@ -16,10 +17,13 @@ export default function QueryProvider({ children }: QueryProviderProps) {
         defaultOptions: {
           queries: {
             // Set default staleTime above 0 to avoid refetching immediately on the client
-            staleTime: 60 * 1000, // 1 minute
-            retry: 3,
+            staleTime: APP_CONFIG.queryDefaults.staleTime,
+            retry: APP_CONFIG.queryDefaults.retryAttempts,
             retryDelay: attemptIndex =>
-              Math.min(1000 * 2 ** attemptIndex, 30000),
+              Math.min(
+                APP_CONFIG.queryDefaults.retryBaseDelay * 2 ** attemptIndex,
+                APP_CONFIG.queryDefaults.retryMaxDelay
+              ),
           },
         },
       })

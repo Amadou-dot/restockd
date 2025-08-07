@@ -1,3 +1,4 @@
+import { APP_CONFIG } from '@/config/app';
 import { useUpdateQuantity } from '@/hooks/useUpdateQuantity';
 import { Button } from '@heroui/button';
 import { Card, CardBody } from '@heroui/card';
@@ -87,7 +88,9 @@ export default function CartItemCard({
                       </span>
                       <Button
                         onPress={incrementQuantity}
-                        disabled={item.quantity >= 99}
+                        disabled={
+                          item.quantity >= APP_CONFIG.cart.maxQuantityPerItem
+                        }
                         color='primary'
                         size='sm'
                         isIconOnly>
@@ -157,7 +160,9 @@ export default function CartItemCard({
                       </span>
                       <Button
                         onPress={incrementQuantity}
-                        disabled={item.quantity >= 99}
+                        disabled={
+                          item.quantity >= APP_CONFIG.cart.maxQuantityPerItem
+                        }
                         color='primary'
                         size='sm'
                         isIconOnly>

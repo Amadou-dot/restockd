@@ -1,3 +1,5 @@
+import { APP_CONFIG } from '@/config/app';
+
 export interface ApiErrorData {
   message: string;
   code?: string;
@@ -84,10 +86,17 @@ export const isNotFoundError = (error: unknown): error is NotFoundError => {
 
 // Helper function to determine if error is client-side (4xx)
 export const isClientError = (error: unknown): boolean => {
-  return isApiError(error) && error.status >= 400 && error.status < 500;
+  return (
+    isApiError(error) &&
+    error.status >= APP_CONFIG.errorThresholds.clientErrorMin &&
+    error.status <= APP_CONFIG.errorThresholds.clientErrorMax
+  );
 };
 
 // Helper function to determine if error is server-side (5xx)
 export const isServerError = (error: unknown): boolean => {
-  return isApiError(error) && error.status >= 500;
+  return (
+    isApiError(error) &&
+    error.status >= APP_CONFIG.errorThresholds.serverErrorMin
+  );
 };

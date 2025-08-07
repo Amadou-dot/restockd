@@ -1,5 +1,6 @@
+import { APP_CONFIG } from '@/config/app';
 import type { QueryClient } from '@tanstack/react-query';
-import { fetchProducts, fetchProduct, productKeys } from './api';
+import { fetchProduct, fetchProducts, productKeys } from './api';
 
 export const prefetchProducts = async (
   queryClient: QueryClient,
@@ -8,7 +9,7 @@ export const prefetchProducts = async (
   await queryClient.prefetchQuery({
     queryKey: productKeys.list(page),
     queryFn: () => fetchProducts(page),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: APP_CONFIG.queryDefaults.staleTime,
   });
 };
 
@@ -16,7 +17,7 @@ export const prefetchProduct = async (queryClient: QueryClient, id: string) => {
   await queryClient.prefetchQuery({
     queryKey: productKeys.detail(id),
     queryFn: () => fetchProduct(id),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: APP_CONFIG.queryDefaults.staleTime,
   });
 };
 

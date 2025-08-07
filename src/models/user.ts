@@ -1,3 +1,4 @@
+import { APP_CONFIG } from '@/config/app';
 import { Product } from '@/models/product';
 import type { ICartDocument as ICart, PopulatedCart } from '@/types/Cart';
 import type { Order as IOrder } from '@/types/Order';
@@ -14,8 +15,14 @@ const userSchema = new Schema<IUserDocument>({
     type: String,
     required: [true, 'First name is required'],
     trim: true,
-    minlength: [2, 'First name must be at least 2 characters long'],
-    maxlength: [50, 'First name cannot exceed 50 characters'],
+    minlength: [
+      APP_CONFIG.user.nameMinLength,
+      `First name must be at least ${APP_CONFIG.user.nameMinLength} characters long`,
+    ],
+    maxlength: [
+      APP_CONFIG.user.nameMaxLength,
+      `First name cannot exceed ${APP_CONFIG.user.nameMaxLength} characters`,
+    ],
     validate: {
       validator: function (v: string) {
         return /^[a-zA-Z\s]+$/.test(v);
@@ -27,8 +34,14 @@ const userSchema = new Schema<IUserDocument>({
     type: String,
     required: [true, 'Last name is required'],
     trim: true,
-    minlength: [2, 'Last name must be at least 2 characters long'],
-    maxlength: [50, 'Last name cannot exceed 50 characters'],
+    minlength: [
+      APP_CONFIG.user.nameMinLength,
+      `Last name must be at least ${APP_CONFIG.user.nameMinLength} characters long`,
+    ],
+    maxlength: [
+      APP_CONFIG.user.nameMaxLength,
+      `Last name cannot exceed ${APP_CONFIG.user.nameMaxLength} characters`,
+    ],
     validate: {
       validator: function (v: string) {
         return /^[a-zA-Z\s]+$/.test(v);
@@ -52,7 +65,10 @@ const userSchema = new Schema<IUserDocument>({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters long'],
+    minlength: [
+      APP_CONFIG.user.passwordMinLength,
+      `Password must be at least ${APP_CONFIG.user.passwordMinLength} characters long`,
+    ],
     select: false, // Do not return password in queries by default
   },
   resetToken: {

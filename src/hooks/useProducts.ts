@@ -1,23 +1,28 @@
+import { APP_CONFIG } from '@/config/app';
 import { useQuery } from '@tanstack/react-query';
-import { fetchProducts, productKeys, ApiError } from '../lib/api';
+import { ApiError, fetchProducts, productKeys } from '../lib/api';
 
 export const useProducts = (page: number = 1) => {
   return useQuery({
     queryKey: productKeys.list(page),
     queryFn: () => fetchProducts(page),
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes (previously cacheTime)
+    staleTime: APP_CONFIG.queryDefaults.staleTime,
+    gcTime: APP_CONFIG.queryDefaults.gcTime,
     retry: (failureCount, error) => {
       // Don't retry on client errors (4xx)
       if (
         error instanceof ApiError &&
-        error.status >= 400 &&
-        error.status < 500
+        error.status >= APP_CONFIG.errorThresholds.clientErrorMin &&
+        error.status <= APP_CONFIG.errorThresholds.clientErrorMax
       ) {
         return false;
       }
-      return failureCount < 3;
+      return failureCount < APP_CONFIG.queryDefaults.retryAttempts;
     },
-    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retryDelay: attemptIndex =>
+      Math.min(
+        APP_CONFIG.queryDefaults.retryBaseDelay * 2 ** attemptIndex,
+        APP_CONFIG.queryDefaults.retryMaxDelay
+      ),
   });
 };

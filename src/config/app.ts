@@ -60,6 +60,22 @@ export const APP_CONFIG = {
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes
     retryAttempts: 3,
+    retryBaseDelay: 1000, // 1 second
+    retryMaxDelay: 30000, // 30 seconds
+  },
+
+  // HTTP status codes
+  httpStatus: {
+    badRequest: 400,
+    serverError: 500,
+    success: 200,
+  },
+
+  // Error handling
+  errorThresholds: {
+    clientErrorMin: 400,
+    clientErrorMax: 499,
+    serverErrorMin: 500,
   },
 } as const;
 
@@ -71,3 +87,7 @@ export const TAX_RATE = APP_CONFIG.tax.rate;
 export const SHIPPING_COST = APP_CONFIG.shipping.cost;
 export const TAX_DISPLAY_RATE = APP_CONFIG.tax.displayRate;
 export const COMPANY_INFO = APP_CONFIG.company;
+
+// HTTP status code exports
+export const HTTP_STATUS = APP_CONFIG.httpStatus;
+export const ERROR_THRESHOLDS = APP_CONFIG.errorThresholds;
