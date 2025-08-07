@@ -10,7 +10,7 @@ export const APP_CONFIG = {
   clientUrl: process.env.CLIENT_URL || 'http://localhost:3000',
 
   // Pagination
-  productsPerPage: 4,
+  productsPerPage: 8,
 
   // Business rules
   tax: {

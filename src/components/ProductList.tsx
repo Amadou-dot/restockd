@@ -60,7 +60,7 @@ export default function ProductList({
 
   if (!isPending && !error && products && products.length > 0) {
     return (
-      <div className='w-full max-w-7xl px-4 flex flex-col'>
+      <div className='w-full max-w-7xl xl:max-w-full px-4 flex flex-col'>
         <div className='flex flex-wrap gap-4 sm:gap-6 md:gap-12 justify-center sm:justify-start mb-8 sm:mb-10'>
           {products.map(product => (
             <ProductCard key={product._id.toString()} product={product} />

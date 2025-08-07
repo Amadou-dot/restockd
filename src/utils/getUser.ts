@@ -7,7 +7,6 @@ export const getUser = async (): Promise<IUserDocument | null> => {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   if (!userId) {
-    console.error('User ID not found in session');
     return null;
   }
 
