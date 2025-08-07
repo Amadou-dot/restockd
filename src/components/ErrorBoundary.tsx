@@ -1,6 +1,7 @@
 'use client';
 
-import { Component, ErrorInfo, ReactNode } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
 import ErrorMessage from './ErrorMessage';
 
 interface Props {
@@ -31,10 +32,12 @@ export default class ErrorBoundary extends Component<Props, State> {
     if (this.state.hasError) {
       return (
         this.props.fallback || (
-          <div className="p-4">
-            <ErrorMessage 
-              title="Something went wrong" 
-              description={this.state.error?.message || 'An unexpected error occurred'} 
+          <div className='p-4'>
+            <ErrorMessage
+              title='Something went wrong'
+              description={
+                this.state.error?.message || 'An unexpected error occurred'
+              }
             />
           </div>
         )

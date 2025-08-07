@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { initializeDatabase } from '../../../../lib/mongoose';
 import { Product } from '../../../../models/product';
 import { PRODUCTS_PER_PAGE } from '../../../../utils/constants';
@@ -78,10 +79,13 @@ export async function POST(request: NextRequest) {
 
     await newProduct.save();
 
-    return NextResponse.json({
-      message: 'Product created successfully',
-      data: newProduct,
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        message: 'Product created successfully',
+        data: newProduct,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Error creating product:', error);
     return NextResponse.json(

@@ -1,5 +1,6 @@
-import { OrderDocument } from '@/types/Order';
-import { User } from '@/types/User';
+import type { OrderDocument } from '@/types/Order';
+import type { User } from '@/types/User';
+import { TAX_RATE } from '@/utils/constants';
 import jsPDF from 'jspdf';
 
 export interface InvoiceData {
@@ -94,8 +95,8 @@ export function generateInvoicePDF(data: InvoiceData): Buffer {
   doc.text(`$${subtotal.toFixed(2)}`, 165, currentY);
 
   currentY += 10;
-  const tax = subtotal * 0.08; // 8% tax
-  doc.text('Tax (8%):', 140, currentY);
+  const tax = subtotal * TAX_RATE;
+  doc.text(`Tax (${(TAX_RATE * 100).toFixed(0)}%):`, 140, currentY);
   doc.text(`$${tax.toFixed(2)}`, 165, currentY);
 
   currentY += 10;

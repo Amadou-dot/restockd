@@ -1,9 +1,13 @@
 import { initializeDatabase } from '@/lib/mongoose';
-import { PopulatedCartItem } from '@/types/Cart';
+import type { PopulatedCartItem } from '@/types/Cart';
 import { getUser } from '@/utils/getUser';
-import { NextRequest as NxtReq, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: NxtReq, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     await initializeDatabase();
     const { id } = await params;

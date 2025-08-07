@@ -1,7 +1,8 @@
 import { initializeDatabase } from '@/lib/mongoose';
 import { Product } from '@/models/product';
-import { Product as ProductType } from '@/types/Product';
-import { NextRequest, NextResponse } from 'next/server';
+import type { Product as ProductType } from '@/types/Product';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // GET /api/admin/products/[id] - Get single product (admin view)
 export async function GET(

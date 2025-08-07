@@ -2,7 +2,8 @@ import { initializeDatabase } from '@/lib/mongoose';
 import { Product } from '@/models/product';
 import type { Product as ProductType } from '@/types/Product';
 import { uploadImageToS3Bucket } from '@/utils/AWSBucket';
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function PUT(
   request: NextRequest,

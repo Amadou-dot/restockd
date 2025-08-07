@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -11,7 +12,10 @@ export async function GET(request: NextRequest) {
   try {
     // Validate that it's a Google image URL for security
     const url = new URL(imageUrl);
-    if (url.hostname !== 'lh3.googleusercontent.com' && url.hostname !== 'avatars.githubusercontent.com') {
+    if (
+      url.hostname !== 'lh3.googleusercontent.com' &&
+      url.hostname !== 'avatars.githubusercontent.com'
+    ) {
       return new NextResponse('Invalid image source', { status: 400 });
     }
 

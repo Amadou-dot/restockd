@@ -1,5 +1,5 @@
 import { initializeDatabase } from '@/lib/mongoose';
-import { OrderItem } from '@/types/Order';
+import type { OrderItem } from '@/types/Order';
 import { uploadPDFToS3Bucket } from '@/utils/AWSBucket';
 import {
   generateInvoiceFilename,

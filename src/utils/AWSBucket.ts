@@ -10,9 +10,7 @@ import {
  * @param file - The file to upload to the S3 bucket
  * @returns The full S3 URL of the uploaded file
  */
-export const uploadImageToS3Bucket = async (
-  file: File
-): Promise<string> => {
+export const uploadImageToS3Bucket = async (file: File): Promise<string> => {
   const client = new S3Client();
   const key = `products/${Date.now()}_${file.name}`;
   const bucketName = process.env.AWS_S3_BUCKET_NAME || '';
@@ -125,4 +123,3 @@ export const deleteInvoiceFromS3Bucket = async (
   const key = invoiceUrl.split('/').pop(); // Extract the invoice key from the URL
   await deleteFromS3Bucket(`invoices/${key}`);
 };
-  

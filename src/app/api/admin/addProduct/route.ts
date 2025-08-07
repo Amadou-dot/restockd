@@ -1,6 +1,7 @@
 import { Product } from '@/models/product';
 import { uploadImageToS3Bucket } from '@/utils/AWSBucket';
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
@@ -12,20 +13,43 @@ export async function POST(request: NextRequest) {
     const userId = formData.get('userId');
 
     if (!name || typeof name !== 'string' || name.trim() === '') {
-      return NextResponse.json({ error: 'Product name is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Product name is required' },
+        { status: 400 }
+      );
     }
-    if (!priceRaw || typeof priceRaw !== 'string' || isNaN(parseFloat(priceRaw))) {
-      return NextResponse.json({ error: 'Product price is required and must be a number' }, { status: 400 });
+    if (
+      !priceRaw ||
+      typeof priceRaw !== 'string' ||
+      isNaN(parseFloat(priceRaw))
+    ) {
+      return NextResponse.json(
+        { error: 'Product price is required and must be a number' },
+        { status: 400 }
+      );
     }
     const price = parseFloat(priceRaw);
-    if (!description || typeof description !== 'string' || description.trim() === '') {
-      return NextResponse.json({ error: 'Product description is required' }, { status: 400 });
+    if (
+      !description ||
+      typeof description !== 'string' ||
+      description.trim() === ''
+    ) {
+      return NextResponse.json(
+        { error: 'Product description is required' },
+        { status: 400 }
+      );
     }
     if (!image || !(image instanceof File)) {
-      return NextResponse.json({ error: 'Product image is required and must be a file' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Product image is required and must be a file' },
+        { status: 400 }
+      );
     }
     if (!userId || typeof userId !== 'string' || userId.trim() === '') {
-      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 }
+      );
     }
 
     const imageUrl = await uploadImageToS3Bucket(image);

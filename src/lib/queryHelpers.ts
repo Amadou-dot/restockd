@@ -1,7 +1,10 @@
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 import { fetchProducts, fetchProduct, productKeys } from './api';
 
-export const prefetchProducts = async (queryClient: QueryClient, page: number = 1) => {
+export const prefetchProducts = async (
+  queryClient: QueryClient,
+  page: number = 1
+) => {
   await queryClient.prefetchQuery({
     queryKey: productKeys.list(page),
     queryFn: () => fetchProducts(page),

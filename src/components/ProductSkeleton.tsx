@@ -37,7 +37,7 @@ export default function ProductSkeleton() {
           <Skeleton className='rounded-sm'>
             <div className='h-6 w-16 rounded-sm bg-default-300' />
           </Skeleton>
-          
+
           <div className='flex gap-4'>
             <Skeleton className='rounded-sm'>
               <div className='h-8 w-8 rounded-sm bg-default-300' />

@@ -1,5 +1,5 @@
 import { cartKeys, updateCartItemQuantity } from '@/lib/api';
-import { PopulatedCart, PopulatedCartItem } from '@/types/Cart';
+import type { PopulatedCart, PopulatedCartItem } from '@/types/Cart';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface CartItemUpdate {

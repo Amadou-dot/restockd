@@ -9,11 +9,15 @@ export const useAdminProducts = (page: number = 1) => {
     gcTime: 10 * 60 * 1000, // 10 minutes (cacheTime)
     retry: (failureCount, error) => {
       // Don't retry on client errors (4xx)
-      if (error instanceof ApiError && error.status >= 400 && error.status < 500) {
+      if (
+        error instanceof ApiError &&
+        error.status >= 400 &&
+        error.status < 500
+      ) {
         return false;
       }
       return failureCount < 3;
     },
-    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+    retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 };

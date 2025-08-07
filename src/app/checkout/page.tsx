@@ -115,7 +115,9 @@ export default function CheckoutPage() {
             <BreadcrumbItem href='/checkout' isCurrent>
               Checkout
             </BreadcrumbItem>
-            <BreadcrumbItem href='/payment' isDisabled>Payment</BreadcrumbItem>
+            <BreadcrumbItem href='/payment' isDisabled>
+              Payment
+            </BreadcrumbItem>
           </Breadcrumbs>
         </nav>
 

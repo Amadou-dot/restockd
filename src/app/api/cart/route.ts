@@ -1,9 +1,9 @@
 import { initializeDatabase } from '@/lib/mongoose';
 import { User } from '@/models/user';
-import { PopulatedCart } from '@/types/Cart';
+import type { PopulatedCart } from '@/types/Cart';
 import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { IUserDocument } from '@/types/User';
+import type { IUserDocument } from '@/types/User';
 import { authOptions } from '@/utils/authOptions';
 
 export async function GET() {
@@ -21,7 +21,7 @@ export async function GET() {
         { status: 404 }
       );
     }
-    const user = await User.findById(userId) as IUserDocument;
+    const user = (await User.findById(userId)) as IUserDocument;
 
     const cart: PopulatedCart = await user.getCart();
 

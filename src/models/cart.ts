@@ -1,4 +1,4 @@
-import { ICartDocument, PopulatedCart } from '@/types/Cart';
+import type { ICartDocument, PopulatedCart } from '@/types/Cart';
 import type { Product as IProduct } from '@/types/Product';
 import mongoose from 'mongoose';
 import { Product } from './product';

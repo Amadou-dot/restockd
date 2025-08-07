@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { cartKeys, fetchOrders, orderKeys, placeOrder, completeOrder } from '../lib/api';
+import {
+  cartKeys,
+  fetchOrders,
+  orderKeys,
+  placeOrder,
+  completeOrder,
+} from '../lib/api';
 
 interface PlaceOrderResponse {
   url?: string;
@@ -32,7 +38,16 @@ export const usePlaceOrder = () => {
 export const useCompleteOrder = () => {
   const queryClient = useQueryClient();
 
-  return useMutation<{ orderId: string; totalPrice: number; itemCount: number; invoiceUrl?: string }, Error, string>({
+  return useMutation<
+    {
+      orderId: string;
+      totalPrice: number;
+      itemCount: number;
+      invoiceUrl?: string;
+    },
+    Error,
+    string
+  >({
     mutationFn: async (sessionId: string) => {
       const response = await completeOrder(sessionId);
       return response;

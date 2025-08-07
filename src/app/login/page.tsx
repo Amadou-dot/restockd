@@ -14,10 +14,8 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <title>Login</title>
-      <meta content='Login to your account' name='description' />
-      <Form onSubmit={handleSubmit} className='max-w-lg mx-auto '>
+    <div className='max-w-lg mx-auto'>
+      <Form onSubmit={handleSubmit} className='space-y-4'>
         <Input
           isRequired
           autoComplete='email'
@@ -89,6 +87,6 @@ export default function LoginPage() {
 
         <SignUpPageLink />
       </Form>
-    </>
+    </div>
   );
 }

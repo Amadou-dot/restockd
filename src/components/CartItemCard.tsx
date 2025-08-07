@@ -5,13 +5,15 @@ import { Image } from '@heroui/image';
 import { FaBookmark, FaMinus, FaPlus, FaTrash } from 'react-icons/fa';
 import type { PopulatedCartItem } from '../types/Cart';
 
+interface CartItemCardProps {
+  item: PopulatedCartItem;
+  canModify?: boolean;
+}
+
 export default function CartItemCard({
   item,
   canModify = true,
-}: {
-  item: PopulatedCartItem;
-  canModify?: boolean;
-}) {
+}: CartItemCardProps) {
   const product = item.product;
   const totalPrice = product.price * item.quantity;
   const { mutate: updateQuantity } = useUpdateQuantity();

@@ -31,9 +31,7 @@ export default function Cart() {
   const { data: cart, isLoading, error } = useCart();
 
   return (
-    <>
-      <title>Cart</title>
-      <meta content='Manage your shopping cart' name='description' />
+    <div>
       {isLoading && !error && (
         <div className='flex items-center justify-center w-screen'>
           <Spinner className='mt-4' title='Loading cart...' />
@@ -74,6 +72,6 @@ export default function Cart() {
           }
         </div>
       )}
-    </>
+    </div>
   );
 }

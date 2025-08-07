@@ -55,7 +55,10 @@ export default function AdminProductPage() {
             products &&
             products.length > 0 &&
             products.map(product => (
-              <AdminProductCard key={product._id.toString()} product={product} />
+              <AdminProductCard
+                key={product._id.toString()}
+                product={product}
+              />
             ))}
 
           {!isPending && !error && products.length === 0 && (

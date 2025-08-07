@@ -1,11 +1,11 @@
 'use client';
 
+import ErrorMessage from '@/components/ErrorMessage';
+import Message from '@/components/Message';
+import ProductCard from '@/components/ProductCard';
+import ProductSkeleton from '@/components/ProductSkeleton';
+import { useProduct } from '@/hooks/useProduct';
 import { useParams } from 'next/navigation';
-import ErrorMessage from '../../../components/ErrorMessage';
-import Message from '../../../components/Message';
-import ProductCard from '../../../components/ProductCard';
-import ProductSkeleton from '../../../components/ProductSkeleton';
-import { useProduct } from '../../../hooks/useProduct';
 
 export default function ProductPage() {
   const params = useParams();

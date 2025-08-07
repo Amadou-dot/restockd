@@ -1,6 +1,6 @@
-import { PopulatedCart } from '@/types/Cart';
-import { OrderDocument } from '@/types/Order';
-import { Product } from '../types/Product';
+import type { PopulatedCart } from '@/types/Cart';
+import type { OrderDocument } from '@/types/Order';
+import type { Product } from '../types/Product';
 
 const API_BASE_URL = '/api';
 
@@ -71,7 +71,9 @@ export const placeOrder = async (): Promise<{ url?: string; id?: string }> => {
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new ApiError(
-      errorData.error || errorData.message || `HTTP error! status: ${response.status}`,
+      errorData.error ||
+        errorData.message ||
+        `HTTP error! status: ${response.status}`,
       response.status,
       response.statusText
     );
@@ -79,10 +81,17 @@ export const placeOrder = async (): Promise<{ url?: string; id?: string }> => {
 
   const result = await response.json();
   return result.data || result; // Handle both wrapped and unwrapped responses
-}
+};
 
 // Complete an order after successful payment
-export const completeOrder = async (sessionId: string): Promise<{ orderId: string; totalPrice: number; itemCount: number; invoiceUrl?: string }> => {
+export const completeOrder = async (
+  sessionId: string
+): Promise<{
+  orderId: string;
+  totalPrice: number;
+  itemCount: number;
+  invoiceUrl?: string;
+}> => {
   const response = await fetch(`${API_BASE_URL}/orders/complete`, {
     method: 'POST',
     headers: {
@@ -91,8 +100,12 @@ export const completeOrder = async (sessionId: string): Promise<{ orderId: strin
     body: JSON.stringify({ sessionId }),
   });
 
-  return handleResponse<{ orderId: string; totalPrice: number; itemCount: number }>(response);
-}
+  return handleResponse<{
+    orderId: string;
+    totalPrice: number;
+    itemCount: number;
+  }>(response);
+};
 
 // Fetch single product by ID
 export const fetchProduct = async (id: string): Promise<Product> => {

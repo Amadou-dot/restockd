@@ -1,19 +1,22 @@
-import { PopulatedCartItem } from '@/types/Cart';
+import type { PopulatedCartItem } from '@/types/Cart';
+import { TAX_RATE, SHIPPING_COST } from '@/utils/constants';
 import { Button } from '@heroui/button';
 import { Card, CardBody, CardHeader } from '@heroui/card';
 import Link from 'next/link';
 import PlaceOrderBtn from './ui/PlaceOrderBtn';
 
+interface CheckoutSummaryProps {
+  cartItems: PopulatedCartItem[];
+  totalPrice: number;
+}
+
 export default function CheckoutSummary({
   cartItems,
   totalPrice,
-}: {
-  cartItems: PopulatedCartItem[];
-  totalPrice: number;
-}) {
+}: CheckoutSummaryProps) {
   const subtotal = totalPrice;
-  const shipping: number = 0; // Free shipping for now
-  const tax = subtotal * 0.08; // 8% tax
+  const shipping: number = SHIPPING_COST;
+  const tax = subtotal * TAX_RATE;
   const total = subtotal + shipping + tax;
 
   return (

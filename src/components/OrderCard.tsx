@@ -1,5 +1,5 @@
 import { Button } from '@heroui/button';
-import { OrderDocument } from '../types/Order';
+import type { OrderDocument } from '../types/Order';
 
 export default function OrderCard({ order }: { order: OrderDocument }) {
   const invoiceURL = order.invoiceUrl;

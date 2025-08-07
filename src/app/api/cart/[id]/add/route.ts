@@ -1,9 +1,13 @@
 import { Product } from '@/models/product';
 import { getUser } from '@/utils/getUser';
-import { NextRequest as NxtReq, NextResponse } from 'next/server';
+import type { NextRequest as NxtReq } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // api/cart/[id]/add
-export async function POST(req: NxtReq,{ params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  req: NxtReq,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const { id } = await params;
 

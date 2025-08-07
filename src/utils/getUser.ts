@@ -1,5 +1,5 @@
 import { User } from '@/models/user';
-import { IUserDocument } from '@/types/User';
+import type { IUserDocument } from '@/types/User';
 import { getServerSession } from 'next-auth';
 import { authOptions } from './authOptions';
 

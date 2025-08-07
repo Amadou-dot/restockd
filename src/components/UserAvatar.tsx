@@ -37,7 +37,14 @@ export default function UserAvatar() {
       userImage = user.image;
     }
   }
-  const disabledKeys = ['wishlist', 'seller', 'support', 'addresses', 'payment', 'account'];
+  const disabledKeys = [
+    'wishlist',
+    'seller',
+    'support',
+    'addresses',
+    'payment',
+    'account',
+  ];
 
   return (
     <Dropdown placement='bottom-end'>

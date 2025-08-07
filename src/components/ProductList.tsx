@@ -88,5 +88,5 @@ export default function ProductList({
         <Message title='No Products Found' />
       </div>
     </div>
-  ); 
+  );
 }

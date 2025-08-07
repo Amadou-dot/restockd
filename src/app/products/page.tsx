@@ -24,10 +24,8 @@ export default function ProductsPage() {
     setSearchParam('page', page.toString());
   };
   return (
-    <>
-      <title>Products</title>
-      <meta name='description' content='Browse our collection of products' />
+    <div>
       <ProductList page={currentPage} onPageChange={handlePageChange} />
-    </>
+    </div>
   );
 }

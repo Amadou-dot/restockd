@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import type mongoose from 'mongoose';
 import type { Product } from './Product';
 
 export interface CartItem {

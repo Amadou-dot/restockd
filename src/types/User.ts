@@ -1,7 +1,7 @@
-import { Document } from 'mongoose';
-import { PopulatedCart } from './Cart';
-import { Order } from './Order';
-import { Product } from './Product';
+import type { Document } from 'mongoose';
+import type { PopulatedCart } from './Cart';
+import type { Order } from './Order';
+import type { Product } from './Product';
 
 export interface User {
   firstName: string;

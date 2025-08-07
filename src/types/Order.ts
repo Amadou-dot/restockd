@@ -1,5 +1,6 @@
-import mongoose, { ObjectId } from 'mongoose';
-import { Product } from './Product';
+import type { ObjectId } from 'mongoose';
+import type mongoose from 'mongoose';
+import type { Product } from './Product';
 
 export interface OrderItem {
   productName: string;

@@ -1,5 +1,6 @@
-import { ProductsResponse } from '@/types/Product';
-import { NextRequest, NextResponse } from 'next/server';
+import type { ProductsResponse } from '@/types/Product';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { initializeDatabase } from '../../../lib/mongoose';
 import { Product } from '../../../models/product';
 import { PRODUCTS_PER_PAGE } from '../../../utils/constants';

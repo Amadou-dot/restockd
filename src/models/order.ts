@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { IOrderDocument, OrderDetails, OrderItem } from '../types/Order';
+import type { IOrderDocument, OrderDetails, OrderItem } from '../types/Order';
 
 const Schema = mongoose.Schema;
 

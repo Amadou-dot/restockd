@@ -1,5 +1,6 @@
 import { initializeDatabase } from '@/lib/mongoose';
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 import { Product } from '../../../../models/product';
 
 export async function GET(

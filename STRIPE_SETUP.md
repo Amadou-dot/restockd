@@ -49,6 +49,7 @@ CLIENT_URL=http://localhost:3000  # Your app's URL (for redirects)
 ## Testing the Integration
 
 1. **Test Card Numbers**
+
    ```
    Successful payment: 4242 4242 4242 4242
    Declined payment: 4000 0000 0000 0002

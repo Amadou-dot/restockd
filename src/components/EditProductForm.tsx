@@ -3,7 +3,7 @@ import { Form } from '@heroui/form';
 import { Input, Textarea } from '@heroui/input';
 import { NumberInput } from '@heroui/number-input';
 import { useState } from 'react';
-import { Product } from '../types/Product';
+import type { Product } from '../types/Product';
 import ErrorMessage from './ErrorMessage';
 
 interface EditProductFormProps {

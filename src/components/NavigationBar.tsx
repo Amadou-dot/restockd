@@ -131,8 +131,8 @@ export default function NavigationBar() {
                 index === 2
                   ? 'primary'
                   : index === menuItems.length - 1
-                  ? 'danger'
-                  : 'foreground'
+                    ? 'danger'
+                    : 'foreground'
               }>
               {title}
             </Link>

@@ -1,4 +1,4 @@
-import { Product } from '../types/Product';
+import type { Product } from '../types/Product';
 import CreateProductForm from './CreateProductForm';
 import EditProductForm from './EditProductForm';
 
