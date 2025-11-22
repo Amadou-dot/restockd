@@ -40,7 +40,7 @@ export default function ProductCard({
   return (
     <Card
       isFooterBlurred
-      className='w-full h-[400px] col-span-12 sm:col-span-5 max-w-[300px]'
+      className='w-full h-[400px] col-span-12 sm:col-span-5 max-w-[300px] group transition-all duration-300 hover:-translate-y-2 overflow-hidden'
       isPressable={isClickable}
       onPress={isClickable ? handleCardClick : undefined}>
       <CardHeader className='absolute z-10 top-1 flex-col items-start'>
@@ -50,7 +50,7 @@ export default function ProductCard({
       <Image
         removeWrapper
         alt={product.name}
-        className='z-0 w-full h-full object-cover'
+        className='z-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'
         src={product.image}
       />
 
