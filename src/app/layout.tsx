@@ -1,4 +1,4 @@
-import AuthProvider from '@/components/AuthProvider';
+import { ClerkProvider } from '@clerk/nextjs';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import NavigationBar from '@/components/NavigationBar';
 import QueryProvider from '@/components/QueryProvider';
@@ -33,19 +33,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' className='dark'>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ErrorBoundary>
-          <AuthProvider>
+    <ClerkProvider>
+      <html lang='en' className='dark'>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <ErrorBoundary>
             <QueryProvider>
               <ToastProvider placement='bottom-center' />
               <NavigationBar />
               <main className='p-8 min-h-screen'>{children}</main>
             </QueryProvider>
-          </AuthProvider>
-        </ErrorBoundary>
-      </body>
-    </html>
+          </ErrorBoundary>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

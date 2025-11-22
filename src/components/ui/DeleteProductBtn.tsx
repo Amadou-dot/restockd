@@ -17,6 +17,7 @@ import ErrorMessage from '../../components/ErrorMessage';
 import WarningMessage from '../../components/WarningMessage';
 
 export default function DeleteProductBtn({ product }: { product: Product }) {
+  const TEXTCUT_LENGTH = 190;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const { mutate: deleteProduct, isPending } = useDeleteProduct();
 
@@ -81,8 +82,8 @@ export default function DeleteProductBtn({ product }: { product: Product }) {
                       </CardBody>
                       <CardFooter className='flex flex-col gap-2 items-center'>
                         <p>{`${
-                          product.description.length > 190
-                            ? `${product.description.slice(0, 190)}...`
+                          product.description.length > TEXTCUT_LENGTH
+                            ? `${product.description.slice(0, TEXTCUT_LENGTH)}...`
                             : product.description
                         }`}</p>
                       </CardFooter>

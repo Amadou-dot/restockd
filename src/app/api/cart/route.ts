@@ -1,18 +1,14 @@
 import { initializeDatabase } from '@/lib/mongoose';
-import { User } from '@/models/user';
+import { getUser } from '@/utils/getUser';
 import type { PopulatedCart } from '@/types/Cart';
-import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import type { IUserDocument } from '@/types/User';
-import { authOptions } from '@/utils/authOptions';
 
 export async function GET() {
   try {
     await initializeDatabase();
-    const session = await getServerSession(authOptions);
-    const userId = session?.user?.id;
+    const user = await getUser();
 
-    if (!userId) {
+    if (!user) {
       return NextResponse.json(
         {
           message: 'User not found',
@@ -21,7 +17,6 @@ export async function GET() {
         { status: 404 }
       );
     }
-    const user = (await User.findById(userId)) as IUserDocument;
 
     const cart: PopulatedCart = await user.getCart();
 

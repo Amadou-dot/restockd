@@ -2,13 +2,14 @@
 import CheckoutSummary from '@/components/CheckoutSummary';
 import { useCart } from '@/hooks/useCart';
 import { Spinner } from '@heroui/spinner';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Alert from '../../components/Alert';
 import CartItemCard from '../../components/CartItemCard';
 import type { PopulatedCartItem } from '../../types/Cart';
 import { Breadcrumbs, BreadcrumbItem } from '@heroui/breadcrumbs';
+
 const CheckoutItemsList = ({
   cartItems,
 }: {
@@ -37,17 +38,17 @@ const CheckoutItemsList = ({
 
 export default function CheckoutPage() {
   const { data: cart, isLoading, error } = useCart();
-  const { data: session, status } = useSession();
+  const { user, isLoaded } = useUser();
   const router = useRouter();
 
   // Redirect to login if not authenticated
   useEffect(() => {
-    if (status === 'loading') return; // Still loading
-    if (!session) {
+    if (!isLoaded) return; // Still loading
+    if (!user) {
       router.push('/login?callbackUrl=/checkout');
       return;
     }
-  }, [session, status, router]);
+  }, [user, isLoaded, router]);
 
   // Redirect to cart if no items
   useEffect(() => {
@@ -57,7 +58,7 @@ export default function CheckoutPage() {
   }, [cart, isLoading, router]);
 
   // Show loading while checking authentication
-  if (status === 'loading') {
+  if (!isLoaded) {
     return (
       <div className='flex justify-center items-center min-h-[400px]'>
         <Spinner size='lg' label='Loading...' />
@@ -66,7 +67,7 @@ export default function CheckoutPage() {
   }
 
   // Don't render anything if redirecting
-  if (!session) {
+  if (!user) {
     return null;
   }
 

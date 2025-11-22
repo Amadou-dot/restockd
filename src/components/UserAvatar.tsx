@@ -6,22 +6,23 @@ import {
   DropdownTrigger,
 } from '@heroui/dropdown';
 import { User } from '@heroui/user';
-import { signOut, useSession } from 'next-auth/react';
+import { useClerk, useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 export default function UserAvatar() {
-  const { data: session } = useSession();
-  const user = session?.user;
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const [imageError, setImageError] = useState(false);
 
   // Reset image error when user changes
   useEffect(() => {
     setImageError(false);
-  }, [user?.image]);
+  }, [user?.imageUrl]);
 
-  const userName = user?.name || 'Guest';
-  const userEmail = user?.email || 'guest@example.com';
+  const userName = user?.fullName || 'Guest';
+  const userEmail =
+    user?.primaryEmailAddress?.emailAddress || 'guest@example.com';
 
   // Use fallback if there's an error or no image
   const fallbackImage = `https://i.pravatar.cc/150?u=${encodeURIComponent(
@@ -29,13 +30,8 @@ export default function UserAvatar() {
   )}`;
 
   let userImage = fallbackImage;
-  if (!imageError && user?.image) {
-    // Use proxy for Google images to avoid CORS issues
-    if (user.image.includes('googleusercontent.com')) {
-      userImage = `/api/proxy-image?url=${encodeURIComponent(user.image)}`;
-    } else {
-      userImage = user.image;
-    }
+  if (!imageError && user?.imageUrl) {
+    userImage = user.imageUrl;
   }
   const disabledKeys = [
     'wishlist',
@@ -52,7 +48,7 @@ export default function UserAvatar() {
         <User
           avatarProps={{
             src: userImage,
-            alt: userName,
+            alt: userName || 'User',
             isBordered: true,
             size: 'sm',
             color: 'secondary',
@@ -106,7 +102,7 @@ export default function UserAvatar() {
           color='danger'
           className='text-danger'
           textValue='Log Out'
-          onPress={() => signOut({ callbackUrl: '/' })}>
+          onPress={() => signOut({ redirectUrl: '/' })}>
           🚪 Log Out
         </DropdownItem>
       </DropdownMenu>

@@ -8,6 +8,7 @@ export interface User {
   lastName: string;
   password: string; // Hashed password
   email: string;
+  clerkId?: string;
   resetToken?: string;
   resetTokenExpiration?: Date;
   createdAt: Date;
@@ -18,7 +19,7 @@ export interface UserRegistrationData {
   firstName: string;
   lastName: string;
   email: string;
-  password: string;
+  password?: string;
   confirmPassword: string;
 }
 

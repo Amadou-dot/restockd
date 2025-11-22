@@ -1,4 +1,5 @@
 'use client';
+import { Badge } from '@heroui/badge';
 import { Button } from '@heroui/button';
 import {
   Navbar,
@@ -9,11 +10,18 @@ import {
   NavbarMenuItem,
   NavbarMenuToggle,
 } from '@heroui/navbar';
-import { useSession } from 'next-auth/react';
+import { dark } from '@clerk/themes';
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  UserButton,
+  useUser,
+} from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import UserAvatar from './UserAvatar';
+import { useCart } from '@/hooks/useCart';
 
 export const CompanyLogo = () => {
   return (
@@ -31,10 +39,10 @@ export const CompanyLogo = () => {
 export default function NavigationBar() {
   const path = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { data: session, status } = useSession();
+  const { user } = useUser();
+  const { data: cart } = useCart();
 
-  const isLoading = status === 'loading';
-  const isLoggedIn = status === 'authenticated' && !!session;
+  const isLoggedIn = !!user;
 
   // Base menu items always shown
   const baseMenuItems = [
@@ -85,38 +93,57 @@ export default function NavigationBar() {
         </NavbarBrand>
       </NavbarContent>
       <NavbarContent className='hidden sm:flex gap-4' justify='center'>
-        {menuItems.map(({ title, to }) => (
-          <NavbarItem key={to} isActive={path === to}>
-            <Link
-              className='w-full'
-              href={to}
-              color='foreground'
-              onClick={() => setIsMenuOpen(false)}>
-              {title}
-            </Link>
-          </NavbarItem>
-        ))}
+        {menuItems.map(({ title, to }) => {
+          const isCart = title === 'Cart';
+          const showBadge = isCart && (cart?.totalQuantity || 0) > 0;
+
+          return (
+            <NavbarItem key={to} isActive={path === to}>
+              {showBadge ? (
+                <Badge
+                  color='danger'
+                  content={cart?.totalQuantity}
+                  isInvisible={!showBadge}
+                  shape='circle'>
+                  <Link
+                    className='w-full'
+                    href={to}
+                    color='foreground'
+                    onClick={() => setIsMenuOpen(false)}>
+                    {title}
+                  </Link>
+                </Badge>
+              ) : (
+                <Link
+                  className='w-full'
+                  href={to}
+                  color='foreground'
+                  onClick={() => setIsMenuOpen(false)}>
+                  {title}
+                </Link>
+              )}
+            </NavbarItem>
+          );
+        })}
       </NavbarContent>
+      {/* ... rest of component ... */}
       <NavbarContent justify='end'>
-        {isLoading ? (
-          <NavbarItem>
-            <span className='text-sm text-gray-500'>Loading...</span>
-          </NavbarItem>
-        ) : isLoggedIn ? (
-          <UserAvatar />
-        ) : (
+        <SignedOut>
           <NavbarItem key={'login'}>
-            <Button
-              as={Link}
-              className='w-full'
-              color='primary'
-              href='/login'
-              variant='ghost'
-              onPress={() => setIsMenuOpen(false)}>
-              Sign In
-            </Button>
+            <SignInButton mode='modal'>
+              <Button
+                className='w-full'
+                color='primary'
+                variant='ghost'
+                onPress={() => setIsMenuOpen(false)}>
+                Sign In
+              </Button>
+            </SignInButton>
           </NavbarItem>
-        )}
+        </SignedOut>
+        <SignedIn>
+          <UserButton appearance={{ baseTheme: dark }} />
+        </SignedIn>
       </NavbarContent>
 
       {/* Mobile menu */}

@@ -62,6 +62,11 @@ const userSchema = new Schema<IUserDocument>({
       message: 'Invalid email address format',
     },
   },
+  clerkId: {
+    type: String,
+    unique: true,
+    sparse: true, // Allows null/undefined values to not conflict
+  },
   password: {
     type: String,
     required: [true, 'Password is required'],
