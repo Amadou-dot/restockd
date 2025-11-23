@@ -5,9 +5,10 @@ import { Spinner } from '@heroui/spinner';
 import Link from 'next/link';
 import ProductCard from './ProductCard';
 
+const NUM_FEATURED_PRODUCTS = 4;
 export default function FeaturedProducts() {
   const { data, isPending, error } = useProducts(1);
-  const products = data?.products?.slice(0, 4) || [];
+  const products = data?.products?.slice(0, NUM_FEATURED_PRODUCTS) || [];
 
   if (error) return null;
 

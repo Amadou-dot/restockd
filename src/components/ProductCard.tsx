@@ -1,6 +1,8 @@
+'use client';
+
 import { Card, CardFooter, CardHeader } from '@heroui/card';
 import { Image } from '@heroui/image';
-import { redirect, RedirectType } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IoHeartOutline } from 'react-icons/io5';
 import type { Product } from '../types/Product';
 import AddToCartButton from './ui/AddToCartButton';
@@ -18,6 +20,7 @@ export default function ProductCard({
   adminActions,
   onCardClick,
 }: ProductCardProps) {
+  const router = useRouter();
   const { data: authData } = {
     data: { isLoggedIn: true },
   }; // Mocked auth data, replace with actual auth hook
@@ -27,7 +30,7 @@ export default function ProductCard({
     if (onCardClick) {
       onCardClick();
     } else if (variant === 'customer') {
-      redirect(`/products/${product._id}`, RedirectType.push);
+      router.push(`/products/${product._id}`);
     }
   };
 
